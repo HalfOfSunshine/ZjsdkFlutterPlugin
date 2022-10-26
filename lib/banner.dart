@@ -28,7 +28,7 @@ class BannerPage extends StatelessWidget {
                 print("BannerAd onAdClose");
               },
               onError: (String id,String msg) {
-                print("BannerAd onError = "+(msg??'未知错误'));
+                print("BannerAd onError = "+(msg));
               },
               onAdDetailClose: (String id,String msg) {
                 print("BannerAd onAdDetailClose");

@@ -44,7 +44,7 @@ xcuserdata/
 
 .packages
 .pub/
-
+.idea/
 build/
 DerivedData/
 *.moved-aside
