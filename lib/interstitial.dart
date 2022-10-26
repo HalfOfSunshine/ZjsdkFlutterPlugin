@@ -10,7 +10,7 @@ class InterstitialPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
+            FloatingActionButton(
                 onPressed: () {
                   ZjsdkFlutter.showInterstitialAd(
                     "J9666281550",

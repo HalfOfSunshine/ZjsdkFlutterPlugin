@@ -10,7 +10,7 @@ class RewardVideoPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
+            FloatingActionButton(
                 onPressed: () {
                   ZjsdkFlutter.showRewardVideoAd(
                     // @"c945709452",@"zjad_iOS_ZR0001",@"zjad_T945484376"

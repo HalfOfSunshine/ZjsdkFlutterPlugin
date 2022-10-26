@@ -1,6 +1,5 @@
 // import 'package:zjsdk_flutter/ad.dart';
 import 'package:flutter/material.dart';
-
 import 'package:zjsdk_flutter/banner.dart';
 import 'package:zjsdk_flutter/interstitial.dart';
 import 'package:zjsdk_flutter/reward_video.dart';
@@ -57,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(child:         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-           RaisedButton(
+           FloatingActionButton(
                 onPressed: () {
                   // @"J8648995207",@"J5621495755","c887417368"
                   ZjsdkFlutter.showSplashAd("J8648995207", 5,
@@ -82,12 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
                 child: Text("开屏广告")),
-            RaisedButton(
+            FloatingActionButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/reward-video');
                 },
                 child: Text("激励视频广告")),
-            RaisedButton(
+            FloatingActionButton(
                 onPressed: () {
                   // Navigator.of(context).pushNamed('/banner');
                   Navigator.push(context,MaterialPageRoute(builder: (context) {
@@ -97,13 +96,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     });  
                 },
                 child: Text("Banner 广告")),
-            RaisedButton(
+            FloatingActionButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/interstitial');
                 },
                 child: Text("插屏广告")),
 
-            RaisedButton(
+            FloatingActionButton(
                 onPressed: () {
                   // @"zjad_h500001iostest",@"J7539616190",@"J6596738679",@"J1009546769",@"J1747131627",@"J1194046705",@"J6060320975"
                   ZjsdkFlutter.showH5Ad("zjad_h500001iostest", "00012282", "吊炸天524", "",10000,"超级无敌4",
