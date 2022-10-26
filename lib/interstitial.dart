@@ -30,7 +30,7 @@ class InterstitialPage extends StatelessWidget {
                       print("InterstitialAd onAdDetailClose");
                     },
                     onError: (String id, String msg) {
-                      print("InterstitialAd onError = "+(msg));
+                      print("InterstitialAd onError = "+(msg??'未知错误'));
                     },
                   );
                 },

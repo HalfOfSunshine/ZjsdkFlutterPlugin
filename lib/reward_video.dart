@@ -22,7 +22,7 @@ class RewardVideoPage extends StatelessWidget {
                       print("RewardVideoAd onAdShow");
                     },
                     onReward: (String id,String msg) {
-                      print("RewardVideoAd onReward,transId = "+(msg));
+                      print("RewardVideoAd onReward,transId = "+(msg??'未知错误'));
                     },
                     onAdClick: (String id,String msg) {
                       print("RewardVideoAd onAdClick");
@@ -34,7 +34,7 @@ class RewardVideoPage extends StatelessWidget {
                       print("RewardVideoAd onAdClose");
                     },
                     onError: (String id, String msg) {
-                      print("RewardVideoAd onError = "+(msg));
+                      print("RewardVideoAd onError = "+(msg??'未知错误'));
                     },
                   );
                 },
