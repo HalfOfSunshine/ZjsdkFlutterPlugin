@@ -114,3 +114,6 @@ Training
 Blog
 About
 Loading complete
+pubspec.lock
+example/pubspec.lock
+example/ios/Podfile.lock
