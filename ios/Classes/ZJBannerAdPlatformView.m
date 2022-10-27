@@ -7,6 +7,7 @@
 
 #import "ZJBannerAdPlatformView.h"
 #import <ZJSDK/ZJSDK.h>
+#import "ZJPlatformTool.h"
 @interface ZJBannerAdPlatformView()<FlutterStreamHandler, ZJBannerAdViewDelegate>
 @property (nonatomic, strong) UIView *containerView;
 
@@ -39,7 +40,7 @@
         
 
         // 加载banner
-        _bannerAd = [[ZJBannerAdView alloc]initWithPlacementId:adId viewController:[ZJBannerAdPlatformView findCurrentShowingViewController] adSize:CGSizeMake(bannerWidth, bannerHeight) interval:0];
+        _bannerAd = [[ZJBannerAdView alloc]initWithPlacementId:adId viewController:[ZJPlatformTool findCurrentShowingViewController] adSize:CGSizeMake(bannerWidth, bannerHeight) interval:0];
         _bannerAd.delegate = self;
         [_bannerAd loadAdAndShow];
 //        [_bannerAd loadBannerAdWithFrame:CGRectMake(0, 0, bannerWidth, bannerHeight) viewController:[MobAdPlugin findCurrentShowingViewController] delegate:self interval:0 group:@"b1"];
@@ -79,7 +80,7 @@
 }
 
 #pragma mark - BannerAdDelegate
-/**
+/**x
  banner广告加载成功
  */
 - (void)zj_bannerAdViewDidLoad:(ZJBannerAdView *)bannerAdView{
@@ -152,44 +153,6 @@
         [result setObject:@"bannerAdViewDidCloseOtherController" forKey:@"event"];
         self.bannerCallback(result);
     }
-}
-
-
-
-
-
-
-+ (UIViewController *)findCurrentShowingViewController{
-    //获得当前活动窗口的根视图
-    UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
-    UIViewController *currentShowingVC = [self findCurrentShowingViewControllerFrom:vc];
-    return currentShowingVC;
-}
-+ (UIViewController *)findCurrentShowingViewControllerFrom:(UIViewController *)vc
-{
-    // 递归方法 Recursive method
-    UIViewController *currentShowingVC;
-    if ([vc presentedViewController]) {
-        // 当前视图是被presented出来的
-        UIViewController *nextRootVC = [vc presentedViewController];
-        currentShowingVC = [self findCurrentShowingViewControllerFrom:nextRootVC];
-
-    } else if ([vc isKindOfClass:[UITabBarController class]]) {
-        // 根视图为UITabBarController
-        UIViewController *nextRootVC = [(UITabBarController *)vc selectedViewController];
-        currentShowingVC = [self findCurrentShowingViewControllerFrom:nextRootVC];
-
-    } else if ([vc isKindOfClass:[UINavigationController class]]){
-        // 根视图为UINavigationController
-        UIViewController *nextRootVC = [(UINavigationController *)vc visibleViewController];
-        currentShowingVC = [self findCurrentShowingViewControllerFrom:nextRootVC];
-
-    } else {
-        // 根视图为非导航类
-        currentShowingVC = vc;
-    }
-
-    return currentShowingVC;
 }
 
 @end

@@ -4,6 +4,8 @@
 #import "ZJH5AdWrapper.h"
 #import "ZJRewardVideoAdWrapper.h"
 #import "ZJBannerAdPlatformView.h"
+#import "ZJNativeExpressAdPlatformView.h"
+#import "ZJPlatformTool.h"
 @interface ZjsdkFlutterPlugin ()
 @property (nonatomic,strong)ZJSplashAdWrapper *splashAd;
 @property (nonatomic,strong)ZJRewardVideoAdWrapper *rewardVideoAd;
@@ -29,11 +31,11 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     ZJBannerAdPlatformViewFactory *f = [[ZJBannerAdPlatformViewFactory alloc] initWithRegistrar:registrar];
     [registrar registerViewFactory:f withId:@"com.zjad.adsdk/banner"];
     
+    ZJNativeExpressAdPlatformViewFactory *g = [[ZJNativeExpressAdPlatformViewFactory alloc] initWithRegistrar:registrar];
+    [registrar registerViewFactory:g withId:@"com.zjad.adsdk/nativeExpress"];
+  
     
     [ZjsdkFlutterPlugin shareInstance].messenger = registrar.messenger;
-    
-    
-
 }
 
 
@@ -149,7 +151,7 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     //激励视频加载成功
     self.rewardVideoAd.rewardVideoLoadSuccess = ^{
         //广告加载成功-调用show
-        [weakSelf.rewardVideoAd showRewardVideoAdWithViewController:[ZjsdkFlutterPlugin findCurrentShowingViewController]];
+        [weakSelf.rewardVideoAd showRewardVideoAdWithViewController:[ZJPlatformTool findCurrentShowingViewController]];
         [weakSelf callbackWithEvent:@"rewardVideoLoadSuccess" otherDic:nil error:nil];
     };
     //奖励触发
@@ -192,7 +194,7 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     }
     [self.interstitialAd loadInterstitialAdWithAdId:adId];
     self.interstitialAd.interstitialAdDidLoad = ^{
-        [weakSelf.interstitialAd showInViewController:[ZjsdkFlutterPlugin findCurrentShowingViewController]];
+        [weakSelf.interstitialAd showInViewController:[ZJPlatformTool findCurrentShowingViewController]];
         [weakSelf callbackWithEvent:@"interstitialAdDidLoad" otherDic:nil error:nil];
     };
     self.interstitialAd.interstitialAdError = ^(NSError * _Nonnull error) {
@@ -244,7 +246,7 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     }
     
     self.h5Ad.onAdDidLoad = ^{
-        [weakSelf.h5Ad showAdWithViewController:[ZjsdkFlutterPlugin findCurrentShowingViewController]];
+        [weakSelf.h5Ad showAdWithViewController:[ZJPlatformTool findCurrentShowingViewController]];
         [weakSelf callbackWithEvent:@"h5AdDidLoad" otherDic:nil error:nil];
     };
     self.h5Ad.onAdError = ^(NSError * _Nonnull error) {
@@ -266,42 +268,6 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     };
     
     [self.h5Ad loadAdWithAdId:adId user:user];
-}
-
-// 获取当前显示的 UIViewController
-+ (UIViewController *)findCurrentShowingViewController {
-    //获得当前活动窗口的根视图
-    UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
-    UIViewController *currentShowingVC = [self findCurrentShowingViewControllerFrom:vc];
-    return currentShowingVC;
-}
-
-
-+ (UIViewController *)findCurrentShowingViewControllerFrom:(UIViewController *)vc
-{
-    // 递归方法 Recursive method
-    UIViewController *currentShowingVC;
-    if ([vc presentedViewController]) {
-        // 当前视图是被presented出来的
-        UIViewController *nextRootVC = [vc presentedViewController];
-        currentShowingVC = [self findCurrentShowingViewControllerFrom:nextRootVC];
-
-    } else if ([vc isKindOfClass:[UITabBarController class]]) {
-        // 根视图为UITabBarController
-        UIViewController *nextRootVC = [(UITabBarController *)vc selectedViewController];
-        currentShowingVC = [self findCurrentShowingViewControllerFrom:nextRootVC];
-
-    } else if ([vc isKindOfClass:[UINavigationController class]]){
-        // 根视图为UINavigationController
-        UIViewController *nextRootVC = [(UINavigationController *)vc visibleViewController];
-        currentShowingVC = [self findCurrentShowingViewControllerFrom:nextRootVC];
-
-    } else {
-        // 根视图为非导航类
-        currentShowingVC = vc;
-    }
-
-    return currentShowingVC;
 }
 
 #pragma mark =============== 回调给Flutter ===============

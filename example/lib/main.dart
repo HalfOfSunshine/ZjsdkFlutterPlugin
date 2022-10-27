@@ -5,6 +5,8 @@ import 'package:zjsdk_flutter/banner.dart';
 import 'package:zjsdk_flutter/interstitial.dart';
 import 'package:zjsdk_flutter/reward_video.dart';
 import 'package:zjsdk_flutter/zjsdk_flutter.dart';
+import 'package:zjsdk_flutter/native_express.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -57,10 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(child:         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-           RaisedButton(
+           ElevatedButton(
                 onPressed: () {
                   // @"J8648995207",@"J5621495755","c887417368"
-                  ZjsdkFlutter.showSplashAd("J8648995207", 5,
+                  ZjsdkFlutter.showSplashAd("J5621495755", 5,
                     onAdLoad: (String id,String msg) {
                       print("SplashAd onAdLoad");
                     },
@@ -82,12 +84,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
                 child: Text("开屏广告")),
-            RaisedButton(
+            ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/reward-video');
                 },
                 child: Text("激励视频广告")),
-            RaisedButton(
+            ElevatedButton(
                 onPressed: () {
                   // Navigator.of(context).pushNamed('/banner');
                   Navigator.push(context,MaterialPageRoute(builder: (context) {
@@ -97,13 +99,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     });  
                 },
                 child: Text("Banner 广告")),
-            RaisedButton(
+            ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed('/interstitial');
                 },
                 child: Text("插屏广告")),
+            ElevatedButton(
+                // @"G3061112693227741",@"K4000000007",@"T945740162",@"zjad_iOS_ZF0001",@"K4000000008"
+                onPressed: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) {
+                      return NativeExpressPage();
+                    })).then((value) {
+                      //
+                    });                  },
+                child: Text("信息流广告")),
 
-            RaisedButton(
+            ElevatedButton(
                 onPressed: () {
                   // @"zjad_h500001iostest",@"J7539616190",@"J6596738679",@"J1009546769",@"J1747131627",@"J1194046705",@"J6060320975"
                   ZjsdkFlutter.showH5Ad("zjad_h500001iostest", "00012282", "吊炸天524", "",10000,"超级无敌4",
