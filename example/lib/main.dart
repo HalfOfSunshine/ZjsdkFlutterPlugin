@@ -1,5 +1,6 @@
 // import 'package:zjsdk_flutter/ad.dart';
 import 'package:flutter/material.dart';
+
 import 'package:zjsdk_flutter/banner.dart';
 import 'package:zjsdk_flutter/interstitial.dart';
 import 'package:zjsdk_flutter/reward_video.dart';
@@ -41,7 +42,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({ Key key }) : super(key: key);
+  const MyHomePage({ Key ?key }) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
