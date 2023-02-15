@@ -88,10 +88,25 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
         [self loadInterstitialAd:call];
         // 加载插屏广告
         
-    } else if ([call.method isEqualToString:@"showH5Ad"]) {
+    }else if ([call.method isEqualToString:@"showH5Ad"]) {
         //        NSString *adId = call.arguments[@"adId"];
         [self loadH5Ad:call];
-    }else {
+    }else if ([call.method isEqualToString:@"showContentVideoListPage"]) {
+//        ZJContentPageAdapter
+        [self loadH5Ad:call];
+    }else if ([call.method isEqualToString:@"showContentVideoFeedPage"]) {
+//        ZJFeedPageAdapter
+        //        NSString *adId = call.arguments[@"adId"];
+        [self loadH5Ad:call];
+    }else if ([call.method isEqualToString:@"showContentVideoHorizontal"]) {
+//        ZJHorizontalFeedAdapter
+        //        NSString *adId = call.arguments[@"adId"];
+        [self loadH5Ad:call];
+    }else if ([call.method isEqualToString:@"showContentVideoImageText"]) {
+//        ZJImageTextAdapter
+        //        NSString *adId = call.arguments[@"adId"];
+        [self loadH5Ad:call];
+    }else{
         result(FlutterMethodNotImplemented);
     }
 }

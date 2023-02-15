@@ -6,6 +6,7 @@ import 'package:zjsdk_flutter/interstitial.dart';
 import 'package:zjsdk_flutter/reward_video.dart';
 import 'package:zjsdk_flutter/zjsdk_flutter.dart';
 import 'package:zjsdk_flutter/native_express.dart';
+import 'package:zjsdk_flutter/content_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,10 +22,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
   }
- 
+
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.grey,
@@ -36,13 +36,14 @@ class _MyAppState extends State<MyApp> {
         '/reward-video': (BuildContext context) => RewardVideoPage(),
         '/banner': (BuildContext context) => BannerPage(),
         '/interstitial': (BuildContext context) => InterstitialPage(),
+        '/content_page': (BuildContext context) => ContentPage(),
       },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({ Key ?key }) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -56,30 +57,33 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(child:         Column(
+        body: Center(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-           ElevatedButton(
+            ElevatedButton(
                 onPressed: () {
                   // @"J8648995207",@"J5621495755","c887417368"
-                  ZjsdkFlutter.showSplashAd("J5621495755", 5,
-                    onAdLoad: (String id,String msg) {
+                  ZjsdkFlutter.showSplashAd(
+                    "J5621495755",
+                    5,
+                    onAdLoad: (String id, String msg) {
                       print("SplashAd onAdLoad");
                     },
-                    onAdShow: (String id,String msg) {
+                    onAdShow: (String id, String msg) {
                       print("SplashAd onAdShow");
                     },
-                    onAdClick: (String id,String msg) {
+                    onAdClick: (String id, String msg) {
                       print("SplashAd onAdClick");
                     },
-                    onCountdownEnd: (String id,String msg) {
+                    onCountdownEnd: (String id, String msg) {
                       print("SplashAd onVideoComplete");
                     },
-                    onAdClose: (String id,String msg) {
+                    onAdClose: (String id, String msg) {
                       print("SplashAd onAdClose");
                     },
                     onError: (String id, String msg) {
-                      print("SplashAd onError = "+(msg??'未知错误'));
+                      print("SplashAd onError = " + (msg ?? '未知错误'));
                     },
                   );
                 },
@@ -92,11 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
                 onPressed: () {
                   // Navigator.of(context).pushNamed('/banner');
-                  Navigator.push(context,MaterialPageRoute(builder: (context) {
-                      return BannerPage();
-                    })).then((value) {
-                      //
-                    });  
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return BannerPage();
+                  })).then((value) {
+                    //
+                  });
                 },
                 child: Text("Banner 广告")),
             ElevatedButton(
@@ -105,43 +109,52 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 child: Text("插屏广告")),
             ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/content_page');
+                },
+                child: Text("视频内容")),
+            ElevatedButton(
                 // @"G3061112693227741",@"K4000000007",@"T945740162",@"zjad_iOS_ZF0001",@"K4000000008"
                 onPressed: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) {
-                      return NativeExpressPage();
-                    })).then((value) {
-                      //
-                    });                  },
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return NativeExpressPage();
+                  })).then((value) {
+                    //
+                  });
+                },
                 child: Text("信息流广告")),
-
             ElevatedButton(
                 onPressed: () {
                   // @"zjad_h500001iostest",@"J7539616190",@"J6596738679",@"J1009546769",@"J1747131627",@"J1194046705",@"J6060320975"
-                  ZjsdkFlutter.showH5Ad("zjad_h500001iostest", "00012282", "吊炸天524", "",10000,"超级无敌4",
-                    onAdLoad:  (String id,String msg) {
+                  ZjsdkFlutter.showH5Ad(
+                    "zjad_h500001iostest",
+                    "00012282",
+                    "吊炸天524",
+                    "",
+                    10000,
+                    "超级无敌4",
+                    onAdLoad: (String id, String msg) {
                       print("H5 onAdLoad");
                     },
-                    onError:  (String id,String msg) {
-                      print("H5 onAdLoad = "+(msg??'未知错误'));
+                    onError: (String id, String msg) {
+                      print("H5 onAdLoad = " + (msg ?? '未知错误'));
                     },
-                    onRewardAdLoad:  (String id,String msg) {
+                    onRewardAdLoad: (String id, String msg) {
                       print("H5 onRewardAdLoad");
                     },
-                    onRewardAdReward:  (String id,String msg) {
-                      print("H5 onRewardAdReward = "+(msg??'未知错误'));
+                    onRewardAdReward: (String id, String msg) {
+                      print("H5 onRewardAdReward = " + (msg ?? '未知错误'));
                     },
-                    onRewardAdClick:  (String id,String msg) {
+                    onRewardAdClick: (String id, String msg) {
                       print("H5 onRewardAdClick");
                     },
-                    onRewardAdError:  (String id,String msg) {
-                      print("H5 onRewardAdError = "+(msg??'未知错误'));
+                    onRewardAdError: (String id, String msg) {
+                      print("H5 onRewardAdError = " + (msg ?? '未知错误'));
                     },
                   );
                 },
                 child: Text("H5广告")),
           ],
-        )
-      )
-    );
+        )));
   }
 }
