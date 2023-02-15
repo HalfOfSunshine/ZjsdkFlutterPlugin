@@ -93,19 +93,19 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
         [self loadH5Ad:call];
     }else if ([call.method isEqualToString:@"showContentVideoListPage"]) {
 //        ZJContentPageAdapter
-        [self loadH5Ad:call];
+        [self showContentVideoListPage:call];
     }else if ([call.method isEqualToString:@"showContentVideoFeedPage"]) {
 //        ZJFeedPageAdapter
         //        NSString *adId = call.arguments[@"adId"];
-        [self loadH5Ad:call];
+        [self showContentVideoFeedPage:call];
     }else if ([call.method isEqualToString:@"showContentVideoHorizontal"]) {
 //        ZJHorizontalFeedAdapter
         //        NSString *adId = call.arguments[@"adId"];
-        [self loadH5Ad:call];
+        [self showContentVideoHorizontal:call];
     }else if ([call.method isEqualToString:@"showContentVideoImageText"]) {
 //        ZJImageTextAdapter
         //        NSString *adId = call.arguments[@"adId"];
-        [self loadH5Ad:call];
+        [self showContentVideoImageText:call];
     }else{
         result(FlutterMethodNotImplemented);
     }
@@ -285,6 +285,28 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     [self.h5Ad loadAdWithAdId:adId user:user];
 }
 
+/**视频内容列表*/
+-(void)showContentVideoListPage:(FlutterMethodCall *)call{
+    NSLog(@"来了");
+}
+
+/**视频内容瀑布流*/
+-(void)showContentVideoFeedPage:(FlutterMethodCall *)call{
+    NSLog(@"来了");
+
+}
+
+/**视频内容横版*/
+-(void)showContentVideoHorizontal:(FlutterMethodCall *)call{
+    NSLog(@"来了");
+
+}
+
+/**视频内容瀑图文*/
+-(void)showContentVideoImageText:(FlutterMethodCall *)call{
+    NSLog(@"来了");
+
+}
 #pragma mark =============== 回调给Flutter ===============
 /**回调事件*/
 -(void)callbackWithEvent:(NSString *)event otherDic:(NSDictionary *)otherDic error:(NSError *)error{

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:zjsdk_flutter/zjsdk_flutter.dart';
+import 'package:zjsdk_flutter/zjsdk_flutter.dart';
 
 class ContentPage extends StatelessWidget {
   @override
@@ -17,33 +17,26 @@ class ContentPage extends StatelessWidget {
             ElevatedButton(onPressed: () {}, child: Text("视频内容横版")),
             ElevatedButton(
                 onPressed: () {
+                  // ZjsdkFlutter.showContentVideoListPage("K90010005",onAdLoad: )
                   // @"zjad_h500001iostest",@"J7539616190",@"J6596738679",@"J1009546769",@"J1747131627",@"J1194046705",@"J6060320975"
-                  // ZjsdkFlutter.showH5Ad(
-                  //   "zjad_h500001iostest",
-                  //   "00012282",
-                  //   "吊炸天524",
-                  //   "",
-                  //   10000,
-                  //   "超级无敌4",
-                  //   onAdLoad: (String id, String msg) {
-                  //     print("H5 onAdLoad");
-                  //   },
-                  //   onError: (String id, String msg) {
-                  //     print("H5 onAdLoad = " + (msg ?? '未知错误'));
-                  //   },
-                  //   onRewardAdLoad: (String id, String msg) {
-                  //     print("H5 onRewardAdLoad");
-                  //   },
-                  //   onRewardAdReward: (String id, String msg) {
-                  //     print("H5 onRewardAdReward = " + (msg ?? '未知错误'));
-                  //   },
-                  //   onRewardAdClick: (String id, String msg) {
-                  //     print("H5 onRewardAdClick");
-                  //   },
-                  //   onRewardAdError: (String id, String msg) {
-                  //     print("H5 onRewardAdError = " + (msg ?? '未知错误'));
-                  //   },
-                  // );
+                  ZjsdkFlutter.showContentVideoListPage(
+                    "K90010005",
+                    onAdLoad: (String id, String msg) {
+                      print("ContentVideo onAdLoad");
+                    },
+                    onError: (String id, String msg) {
+                      print("ContentVideo onAdLoad = " + (msg ?? '未知错误'));
+                    },
+                    onAdClick: (String id, String msg) {
+                      print("ContentVideo onAdLoad");
+                    },
+                    onAdClose: (String id, String msg) {
+                      print("ContentVideo onAdReward = " + (msg ?? '未知错误'));
+                    },
+                    onAdDetailClose: (String id, String msg) {
+                      print("ContentVideo onAdClick");
+                    },
+                  );
                 },
                 child: Text("视频内容图文")),
           ],
