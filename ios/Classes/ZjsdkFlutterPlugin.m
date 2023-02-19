@@ -4,8 +4,17 @@
 #import "ZJH5AdWrapper.h"
 #import "ZJRewardVideoAdWrapper.h"
 #import "ZJBannerAdPlatformView.h"
+#import "ZJContentListPagePlatformView.h"
+#import "ZJContentFeedPagePlatformView.h"
+#import "ZJContentHorizontalPagePlatformView.h"
+#import "ZJContentImageTextPagePlatformView.h"
+
 #import "ZJNativeExpressAdPlatformView.h"
 #import "ZJPlatformTool.h"
+#import "ZJImageTextVC.h"
+#import "ZJContentListPageVC.h"
+#import "ZJFeedPageVC.h"
+#import "ZJHorizontalFeedPageVC.h"
 @interface ZjsdkFlutterPlugin ()
 @property (nonatomic,strong)ZJSplashAdWrapper *splashAd;
 @property (nonatomic,strong)ZJRewardVideoAdWrapper *rewardVideoAd;
@@ -28,12 +37,24 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     
-    ZJBannerAdPlatformViewFactory *f = [[ZJBannerAdPlatformViewFactory alloc] initWithRegistrar:registrar];
-    [registrar registerViewFactory:f withId:@"com.zjad.adsdk/banner"];
+    ZJBannerAdPlatformViewFactory *bannerFactory = [[ZJBannerAdPlatformViewFactory alloc] initWithRegistrar:registrar];
+    [registrar registerViewFactory:bannerFactory withId:@"com.zjad.adsdk/banner"];
     
-    ZJNativeExpressAdPlatformViewFactory *g = [[ZJNativeExpressAdPlatformViewFactory alloc] initWithRegistrar:registrar];
-    [registrar registerViewFactory:g withId:@"com.zjad.adsdk/nativeExpress"];
+    ZJNativeExpressAdPlatformViewFactory *nativeExpressFactory = [[ZJNativeExpressAdPlatformViewFactory alloc] initWithRegistrar:registrar];
+    [registrar registerViewFactory:nativeExpressFactory withId:@"com.zjad.adsdk/nativeExpress"];
   
+    ZJContentListPagePlatformViewFactory *contentListFactory = [[ZJContentListPagePlatformViewFactory alloc] initWithRegistrar:registrar];
+    [registrar registerViewFactory:contentListFactory withId:@"com.zjad.adsdk/contentVideoList"];
+    
+#warning 未完成
+    ZJContentFeedPagePlatformViewFactory *contentFeedFactory = [[ZJContentFeedPagePlatformViewFactory alloc] initWithRegistrar:registrar];
+    [registrar registerViewFactory:contentFeedFactory withId:@"com.zjad.adsdk/contentVideoFeed"];
+    
+    ZJContentHorizontalPagePlatformViewFactory *contentHorizontalFactory = [[ZJContentHorizontalPagePlatformViewFactory alloc] initWithRegistrar:registrar];
+    [registrar registerViewFactory:contentHorizontalFactory withId:@"com.zjad.adsdk/contentVideoHorizontal"];
+
+    ZJContentImageTextPagePlatformViewFactory *contentImageTextFactory = [[ZJContentImageTextPagePlatformViewFactory alloc] initWithRegistrar:registrar];
+    [registrar registerViewFactory:contentImageTextFactory withId:@"com.zjad.adsdk/contentVideoImageText"];
     
     [ZjsdkFlutterPlugin shareInstance].messenger = registrar.messenger;
 }
@@ -285,27 +306,143 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     [self.h5Ad loadAdWithAdId:adId user:user];
 }
 
+#pragma mark =============== 视频内容各个样式 ===============
 /**视频内容列表*/
 -(void)showContentVideoListPage:(FlutterMethodCall *)call{
-    NSLog(@"来了");
+    NSDictionary  *dic = call.arguments;
+    NSString *adId = [dic objectForKey:@"adId"];
+    ZJContentListPageVC *vc = [[ZJContentListPageVC alloc]init];
+    vc.contentId = adId;
+    __weak __typeof(self) weakSelf = self;
+    vc.videoDidStartPlay = ^{
+        [weakSelf callbackWithEvent:@"videoDidStartPlay" otherDic:nil error:nil];
+    };
+    vc.videoDidPause = ^{
+        [weakSelf callbackWithEvent:@"videoDidPause" otherDic:nil error:nil];
+    };
+    vc.videoDidResume = ^{
+        [weakSelf callbackWithEvent:@"videoDidResume" otherDic:nil error:nil];
+    };
+    vc.videoDidEndPlay = ^{
+        [weakSelf callbackWithEvent:@"videoDidEndPlay" otherDic:nil error:nil];
+    };
+    vc.videoDidFailedToPlay = ^(NSError * _Nonnull error) {
+        [weakSelf callbackWithEvent:@"videoDidFailedToPlay" otherDic:nil error:error];
+    };
+    vc.contentDidFullDisplay = ^{
+        [weakSelf callbackWithEvent:@"contentDidFullDisplay" otherDic:nil error:nil];
+    };
+    vc.contentDidEndDisplay = ^{
+        [weakSelf callbackWithEvent:@"contentDidEndDisplay" otherDic:nil error:nil];
+    };
+    vc.contentDidPause = ^{
+        [weakSelf callbackWithEvent:@"contentDidPause" otherDic:nil error:nil];
+    };
+    vc.contentDidResume = ^{
+        [weakSelf callbackWithEvent:@"contentDidResume" otherDic:nil error:nil];
+    };
+    [self presentNavViewcontroller:vc];
 }
 
 /**视频内容瀑布流*/
 -(void)showContentVideoFeedPage:(FlutterMethodCall *)call{
-    NSLog(@"来了");
-
+    NSDictionary  *dic = call.arguments;
+    NSString *adId = [dic objectForKey:@"adId"];
+    ZJFeedPageVC *vc = [[ZJFeedPageVC alloc]init];
+    vc.contentId = adId;
+    __weak __typeof(self) weakSelf = self;
+    vc.videoDidStartPlay = ^{
+        [weakSelf callbackWithEvent:@"videoDidStartPlay" otherDic:nil error:nil];
+    };
+    vc.videoDidPause = ^{
+        [weakSelf callbackWithEvent:@"videoDidPause" otherDic:nil error:nil];
+    };
+    vc.videoDidResume = ^{
+        [weakSelf callbackWithEvent:@"videoDidResume" otherDic:nil error:nil];
+    };
+    vc.videoDidEndPlay = ^{
+        [weakSelf callbackWithEvent:@"videoDidEndPlay" otherDic:nil error:nil];
+    };
+    vc.videoDidFailedToPlay = ^(NSError * _Nonnull error) {
+        [weakSelf callbackWithEvent:@"videoDidFailedToPlay" otherDic:nil error:error];
+    };
+    vc.contentDidFullDisplay = ^{
+        [weakSelf callbackWithEvent:@"contentDidFullDisplay" otherDic:nil error:nil];
+    };
+    vc.contentDidEndDisplay = ^{
+        [weakSelf callbackWithEvent:@"contentDidEndDisplay" otherDic:nil error:nil];
+    };
+    vc.contentDidPause = ^{
+        [weakSelf callbackWithEvent:@"contentDidPause" otherDic:nil error:nil];
+    };
+    vc.contentDidResume = ^{
+        [weakSelf callbackWithEvent:@"contentDidResume" otherDic:nil error:nil];
+    };
+    [self presentNavViewcontroller:vc];
 }
 
 /**视频内容横版*/
 -(void)showContentVideoHorizontal:(FlutterMethodCall *)call{
-    NSLog(@"来了");
-
+    NSDictionary  *dic = call.arguments;
+    NSString *adId = [dic objectForKey:@"adId"];
+    ZJHorizontalFeedPageVC *vc = [[ZJHorizontalFeedPageVC alloc]init];
+    vc.contentId = adId;
+    __weak __typeof(self) weakSelf = self;
+    vc.videoDidStartPlay = ^{
+        [weakSelf callbackWithEvent:@"videoDidStartPlay" otherDic:nil error:nil];
+    };
+    vc.videoDidPause = ^{
+        [weakSelf callbackWithEvent:@"videoDidPause" otherDic:nil error:nil];
+    };
+    vc.videoDidResume = ^{
+        [weakSelf callbackWithEvent:@"videoDidResume" otherDic:nil error:nil];
+    };
+    vc.videoDidEndPlay = ^{
+        [weakSelf callbackWithEvent:@"videoDidEndPlay" otherDic:nil error:nil];
+    };
+    vc.videoDidFailedToPlay = ^(NSError * _Nonnull error) {
+        [weakSelf callbackWithEvent:@"videoDidFailedToPlay" otherDic:nil error:error];
+    };
+    vc.contentDidFullDisplay = ^{
+        [weakSelf callbackWithEvent:@"contentDidFullDisplay" otherDic:nil error:nil];
+    };
+    vc.contentDidEndDisplay = ^{
+        [weakSelf callbackWithEvent:@"contentDidEndDisplay" otherDic:nil error:nil];
+    };
+    vc.contentDidPause = ^{
+        [weakSelf callbackWithEvent:@"contentDidPause" otherDic:nil error:nil];
+    };
+    vc.contentDidResume = ^{
+        [weakSelf callbackWithEvent:@"contentDidResume" otherDic:nil error:nil];
+    };
+    vc.horizontalFeedDetailDidEnter = ^{
+        [weakSelf callbackWithEvent:@"horizontalFeedDetailDidEnter" otherDic:nil error:nil];
+    };
+    vc.horizontalFeedDetailDidLeave = ^{
+        [weakSelf callbackWithEvent:@"horizontalFeedDetailDidLeave" otherDic:nil error:nil];
+    };
+    vc.horizontalFeedDetailDidAppear = ^{
+        [weakSelf callbackWithEvent:@"horizontalFeedDetailDidAppear" otherDic:nil error:nil];
+    };
+    vc.horizontalFeedDetailDidDisappear = ^{
+        [weakSelf callbackWithEvent:@"horizontalFeedDetailDidDisappear" otherDic:nil error:nil];
+    };
+    [self presentNavViewcontroller:vc];
 }
 
 /**视频内容瀑图文*/
 -(void)showContentVideoImageText:(FlutterMethodCall *)call{
-    NSLog(@"来了");
+    NSDictionary  *dic = call.arguments;
+    NSString *adId = [dic objectForKey:@"adId"];
+    ZJImageTextVC *VC = [[ZJImageTextVC alloc]init];
+    VC.contentId = adId;
+    [self presentNavViewcontroller:VC];
+}
 
+-(void)presentNavViewcontroller:(UIViewController *)vc{
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+    nav.modalPresentationStyle = 0;
+    [zj_getCurrentVC() presentViewController:nav animated:YES completion:nil];
 }
 #pragma mark =============== 回调给Flutter ===============
 /**回调事件*/

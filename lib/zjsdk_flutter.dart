@@ -195,11 +195,14 @@ class ZjsdkFlutter {
 
   //self.contentId
   static void showContentVideoListPage(String adId,
-      {AdCallback? onAdLoad,
-      AdCallback? onAdShow,
-      AdCallback? onAdClick,
-      AdCallback? onAdClose,
-      AdCallback? onAdDetailClose,
+      {AdCallback? onVideoDidStartPlay,
+      AdCallback? onVideoDidPause,
+      AdCallback? onVideoDidResume,
+      AdCallback? onVideoDidEndPlay,
+      AdCallback? onContentDidFullDisplay,
+      AdCallback? onContentDidEndDisplay,
+      AdCallback? onContentDidPause,
+      AdCallback? onContentDidResume,
       AdCallback? onError}) {
     _methodChannel.invokeMethod(
         "showContentVideoListPage", {"_channelId": ++_channelId, "adId": adId});
@@ -208,28 +211,307 @@ class ZjsdkFlutter {
         EventChannel("com.zjsdk.adsdk/event_$_channelId");
     eventChannel.receiveBroadcastStream().listen((event) {
       switch (event["event"]) {
-        case "interstitialAdDidLoad":
-          onAdLoad?.call("interstitialAdDidLoad", "");
+        case "videoDidStartPlay":
+          onVideoDidStartPlay?.call("videoDidStartPlay", "");
           break;
 
-        case "interstitialAdDidPresentScreen":
-          onAdShow?.call("interstitialAdDidPresentScreen", "");
+        case "videoDidPause":
+          onVideoDidPause?.call("videoDidPause", "");
           break;
 
-        case "interstitialAdDidClick":
-          onAdClick?.call("interstitialAdDidClick", "");
+        case "videoDidResume":
+          onVideoDidResume?.call("videoDidResume", "");
           break;
 
-        case "interstitialAdDidClose":
-          onAdClose?.call("interstitialAdDidClose", "");
+        case "videoDidEndPlay":
+          onVideoDidEndPlay?.call("videoDidEndPlay", "");
           break;
 
-        case "interstitialAdDetailDidClose":
-          onAdDetailClose?.call("interstitialAdDetailDidClose", "");
+        case "videoDidFailedToPlay":
+          onError?.call("videoDidFailedToPlay", event["error"]);
           break;
 
-        case "interstitialAdError":
-          onError?.call("interstitialAdError", event["error"]);
+        case "contentDidFullDisplay":
+          onContentDidFullDisplay?.call("contentDidFullDisplay", "");
+          break;
+
+        case "contentDidEndDisplay":
+          onContentDidEndDisplay?.call("contentDidEndDisplay", "");
+          break;
+
+        case "contentDidPause":
+          onContentDidPause?.call("contentDidPause", "");
+          break;
+
+        case "contentDidResume":
+          onContentDidResume?.call("contentDidResume", "");
+          break;
+      }
+    });
+  }
+
+  static void showContentVideoFeedPage(String adId,
+      {AdCallback? onVideoDidStartPlay,
+      AdCallback? onVideoDidPause,
+      AdCallback? onVideoDidResume,
+      AdCallback? onVideoDidEndPlay,
+      AdCallback? onContentDidFullDisplay,
+      AdCallback? onContentDidEndDisplay,
+      AdCallback? onContentDidPause,
+      AdCallback? onContentDidResume,
+      AdCallback? onError}) {
+    _methodChannel.invokeMethod(
+        "showContentVideoFeedPage", {"_channelId": ++_channelId, "adId": adId});
+
+    EventChannel eventChannel =
+        EventChannel("com.zjsdk.adsdk/event_$_channelId");
+    eventChannel.receiveBroadcastStream().listen((event) {
+      switch (event["event"]) {
+        case "videoDidStartPlay":
+          onVideoDidStartPlay?.call("videoDidStartPlay", "");
+          break;
+
+        case "videoDidPause":
+          onVideoDidPause?.call("videoDidPause", "");
+          break;
+
+        case "videoDidResume":
+          onVideoDidResume?.call("videoDidResume", "");
+          break;
+
+        case "videoDidEndPlay":
+          onVideoDidEndPlay?.call("videoDidEndPlay", "");
+          break;
+
+        case "videoDidFailedToPlay":
+          onError?.call("videoDidFailedToPlay", event["error"]);
+          break;
+
+        case "contentDidFullDisplay":
+          onContentDidFullDisplay?.call("contentDidFullDisplay", "");
+          break;
+
+        case "contentDidEndDisplay":
+          onContentDidEndDisplay?.call("contentDidEndDisplay", "");
+          break;
+
+        case "contentDidPause":
+          onContentDidPause?.call("contentDidPause", "");
+          break;
+
+        case "contentDidResume":
+          onContentDidResume?.call("contentDidResume", "");
+          break;
+      }
+    });
+  }
+
+  static void showContentVideoHorizontal(String adId,
+      {AdCallback? onVideoDidStartPlay,
+      AdCallback? onVideoDidPause,
+      AdCallback? onVideoDidResume,
+      AdCallback? onVideoDidEndPlay,
+      AdCallback? onContentDidFullDisplay,
+      AdCallback? onContentDidEndDisplay,
+      AdCallback? onContentDidPause,
+      AdCallback? onContentDidResume,
+      AdCallback? onHorizontalFeedDetailDidEnter,
+      AdCallback? onHorizontalFeedDetailDidLeave,
+      AdCallback? onHorizontalFeedDetailDidAppear,
+      AdCallback? onHorizontalFeedDetailDidDisappear,
+      AdCallback? onError}) {
+    _methodChannel.invokeMethod("showContentVideoHorizontal",
+        {"_channelId": ++_channelId, "adId": adId});
+
+    EventChannel eventChannel =
+        EventChannel("com.zjsdk.adsdk/event_$_channelId");
+    eventChannel.receiveBroadcastStream().listen((event) {
+      switch (event["event"]) {
+        case "videoDidStartPlay":
+          onVideoDidStartPlay?.call("videoDidStartPlay", "");
+          break;
+
+        case "videoDidPause":
+          onVideoDidPause?.call("videoDidPause", "");
+          break;
+
+        case "videoDidResume":
+          onVideoDidResume?.call("videoDidResume", "");
+          break;
+
+        case "videoDidEndPlay":
+          onVideoDidEndPlay?.call("videoDidEndPlay", "");
+          break;
+
+        case "videoDidFailedToPlay":
+          onError?.call("videoDidFailedToPlay", event["error"]);
+          break;
+
+        case "contentDidFullDisplay":
+          onContentDidFullDisplay?.call("contentDidFullDisplay", "");
+          break;
+
+        case "contentDidEndDisplay":
+          onContentDidEndDisplay?.call("contentDidEndDisplay", "");
+          break;
+
+        case "contentDidPause":
+          onContentDidPause?.call("contentDidPause", "");
+          break;
+
+        case "contentDidResume":
+          onContentDidResume?.call("contentDidResume", "");
+          break;
+
+        case "horizontalFeedDetailDidEnter":
+          onHorizontalFeedDetailDidEnter?.call(
+              "horizontalFeedDetailDidEnter", "");
+          break;
+
+        case "horizontalFeedDetailDidLeave":
+          onHorizontalFeedDetailDidLeave?.call(
+              "horizontalFeedDetailDidLeave", "");
+          break;
+
+        case "horizontalFeedDetailDidAppear":
+          onHorizontalFeedDetailDidAppear?.call(
+              "horizontalFeedDetailDidAppear", "");
+          break;
+
+        case "horizontalFeedDetailDidDisappear":
+          onHorizontalFeedDetailDidDisappear?.call(
+              "horizontalFeedDetailDidDisappear", "");
+          break;
+      }
+    });
+  }
+
+  static void showContentVideoImageText(String adId,
+      {AdCallback? onVideoDidStartPlay,
+      AdCallback? onVideoDidPause,
+      AdCallback? onVideoDidResume,
+      AdCallback? onVideoDidEndPlay,
+      AdCallback? onContentDidFullDisplay,
+      AdCallback? onContentDidEndDisplay,
+      AdCallback? onContentDidPause,
+      AdCallback? onContentDidResume,
+      AdCallback? onHorizontalFeedDetailDidEnter,
+      AdCallback? onHorizontalFeedDetailDidLeave,
+      AdCallback? onHorizontalFeedDetailDidAppear,
+      AdCallback? onHorizontalFeedDetailDidDisappear,
+      AdCallback? onImageTextDetailDidEnter,
+      AdCallback? onImageTextDetailDidLeave,
+      AdCallback? onImageTextDetailDidAppear,
+      AdCallback? onImageTextDetailDidDisappear,
+      AdCallback? onImageTextDetailDidLoadFinish,
+      AdCallback? onImageTextDetailDidScroll,
+      AdCallback? onError}) {
+    _methodChannel.invokeMethod("showContentVideoImageText",
+        {"_channelId": ++_channelId, "adId": adId});
+
+    EventChannel eventChannel =
+        EventChannel("com.zjsdk.adsdk/event_$_channelId");
+    eventChannel.receiveBroadcastStream().listen((event) {
+      switch (event["event"]) {
+        case "videoDidStartPlay":
+          onVideoDidStartPlay?.call("videoDidStartPlay", "");
+          break;
+
+        case "videoDidPause":
+          onVideoDidPause?.call("videoDidPause", "");
+          break;
+
+        case "videoDidResume":
+          onVideoDidResume?.call("videoDidResume", "");
+          break;
+
+        case "videoDidEndPlay":
+          onVideoDidEndPlay?.call("videoDidEndPlay", "");
+          break;
+
+        case "videoDidFailedToPlay":
+          onError?.call("videoDidFailedToPlay", event["error"]);
+          break;
+
+        case "contentDidFullDisplay":
+          onContentDidFullDisplay?.call("contentDidFullDisplay", "");
+          break;
+
+        case "contentDidEndDisplay":
+          onContentDidEndDisplay?.call("contentDidEndDisplay", "");
+          break;
+
+        case "contentDidPause":
+          onContentDidPause?.call("contentDidPause", "");
+          break;
+
+        case "contentDidResume":
+          onContentDidResume?.call("contentDidResume", "");
+          break;
+
+        case "horizontalFeedDetailDidEnter":
+          onHorizontalFeedDetailDidEnter?.call(
+              "horizontalFeedDetailDidEnter", "");
+          break;
+
+        case "horizontalFeedDetailDidLeave":
+          onHorizontalFeedDetailDidLeave?.call(
+              "horizontalFeedDetailDidLeave", "");
+          break;
+
+        case "horizontalFeedDetailDidAppear":
+          onHorizontalFeedDetailDidAppear?.call(
+              "horizontalFeedDetailDidAppear", "");
+          break;
+
+        case "horizontalFeedDetailDidDisappear":
+          onHorizontalFeedDetailDidDisappear?.call(
+              "horizontalFeedDetailDidDisappear", "");
+          break;
+
+        case "imageTextDetailDidEnter":
+          onImageTextDetailDidEnter?.call("imageTextDetailDidEnter", "");
+          break;
+
+        case "horizontalFeedDetailDidLeave":
+          onHorizontalFeedDetailDidLeave?.call(
+              "horizontalFeedDetailDidLeave", "");
+          break;
+
+        case "horizontalFeedDetailDidAppear":
+          onHorizontalFeedDetailDidAppear?.call(
+              "horizontalFeedDetailDidAppear", "");
+          break;
+
+        case "horizontalFeedDetailDidDisappear":
+          onHorizontalFeedDetailDidDisappear?.call(
+              "horizontalFeedDetailDidDisappear", "");
+          break;
+
+        case "imageTextDetailDidEnter":
+          onImageTextDetailDidEnter?.call("imageTextDetailDidEnter", "");
+          break;
+
+        case "imageTextDetailDidLeave":
+          onImageTextDetailDidLeave?.call("imageTextDetailDidLeave", "");
+          break;
+
+        case "imageTextDetailDidAppear":
+          onImageTextDetailDidAppear?.call("imageTextDetailDidAppear", "");
+          break;
+
+        case "imageTextDetailDidDisappear":
+          onImageTextDetailDidDisappear?.call(
+              "imageTextDetailDidDisappear", "");
+          break;
+
+        case "imageTextDetailDidLoadFinish":
+          onImageTextDetailDidLoadFinish?.call(
+              "imageTextDetailDidLoadFinish", "");
+          break;
+
+        case "imageTextDetailDidScroll":
+          onImageTextDetailDidScroll?.call("imageTextDetailDidScroll", "");
           break;
       }
     });

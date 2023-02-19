@@ -6,7 +6,8 @@ import 'package:zjsdk_flutter/interstitial.dart';
 import 'package:zjsdk_flutter/reward_video.dart';
 import 'package:zjsdk_flutter/zjsdk_flutter.dart';
 import 'package:zjsdk_flutter/native_express.dart';
-import 'package:zjsdk_flutter/content_page.dart';
+import 'package:zjsdk_flutter/content_native_page.dart';
+import 'package:zjsdk_flutter/content_video_view_selector.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,7 +37,9 @@ class _MyAppState extends State<MyApp> {
         '/reward-video': (BuildContext context) => RewardVideoPage(),
         '/banner': (BuildContext context) => BannerPage(),
         '/interstitial': (BuildContext context) => InterstitialPage(),
-        '/content_page': (BuildContext context) => ContentPage(),
+        '/content_native_page': (BuildContext context) => ContentNativePage(),
+        '/content_video_view_selector': (BuildContext context) =>
+            ContentVideoViewSelector(),
       },
     );
   }
@@ -110,9 +113,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("插屏广告")),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/content_page');
+                  Navigator.of(context).pushNamed('/content_native_page');
                 },
-                child: Text("视频内容")),
+                child: Text("视频内容(ios原生vc形式)")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ContentVideoViewSelector();
+                  })).then((value) {
+                    //
+                  });
+                },
+                child: Text("视频内容(视图嵌入形式)")),
             ElevatedButton(
                 // @"G3061112693227741",@"K4000000007",@"T945740162",@"zjad_iOS_ZF0001",@"K4000000008"
                 onPressed: () {
