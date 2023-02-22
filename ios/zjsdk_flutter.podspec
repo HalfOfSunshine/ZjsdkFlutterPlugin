@@ -16,13 +16,8 @@ A new Flutter project.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'ZJSDK/ZJSDKModuleDSP'
-  s.dependency 'ZJSDK/ZJSDKModuleGDT'#优量汇广告
-  s.dependency 'ZJSDK/ZJSDKModuleCSJ'#穿山甲广告
-  # s.dependency 'ZJSDK/ZJSDKModuleKS'#快手广告
-  s.dependency 'ZJSDK/ZJSDKModuleMTG'#MTG广告
-  s.dependency 'ZJSDK/ZJSDKModuleSIG'#Sigmob广告
-  s.dependency 'ZJSDK/ZJSDKModuleBD'#百度广告  s.platform = :ios, '9.0'
+  s.dependency 'ZJSDK'
+  s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
