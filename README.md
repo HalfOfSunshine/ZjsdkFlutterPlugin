@@ -9,6 +9,9 @@ print_background: true
 ---
 
 # ZJSDK_iOS_Flutter使用文档 {ignore=true}
+| 最新版本更新日志 | 修订日期  | 修订说明       |
+| ---------------- | --------- | -------------- |
+|v2.5.3.0|2023-02-22|1，新增视频内容广告样式，<br>2，增加视频内容四种样式插件<br>3，XCode14下视频内容接入方式更新，详见[2.6.1、ZJContentPage接入注意事项](#291-font-colorredzjcontentpage接入注意事项font)|
 
 ## <span id="jump1">一、iOS SDK接入说明</span>
 
@@ -621,35 +624,293 @@ h5_rewardAdRewardClick
 h5_rewardAdRewardError
 
 ```
+### 2.6、接入视频内容(ZJContentPage)</span>
+#### 2.6.1、<font color=red>ZJContentPage接入注意事项</font>
+由于快手pod库不支持内容包，视频内容模块需要单独手动导入
+视频内容集成注意事项：
+一，手动引入libIPDSDKModuleKS.a（直接拉进项目里）
+二，将KSAdSDK.framework和KSAdSDK.podspec，放在工程文件夹内（不是直接拉进项目里）
+三，Podfile里指定本地快手KSAdSDK.podspec的相对路径，如demo中路径为： pod 'KSAdSDK', :path => '../ZJSDK/ZJSDKModuleKS' 
+四：打包发布之前，去掉x86_64框架，具体的拆分合并命令参考以下
+```
+cd [KSAdSDK.framework所在的目录]
+mkdir ./bak
+cp -r KSAdSDK.framework ./bak
+lipo KSAdSDK.framework/KSAdSDK -thin armv7 -output KSAdSDK_armv7
+lipo KSAdSDK.framework/KSAdSDK -thin arm64 -output KSAdSDK_arm64
+lipo -create KSAdSDK_armv7 KSAdSDK_arm64 -output KSAdSDK
+mv KSAdSDK KSAdSDK.framework/
+```
+
+#### 2.6.2、ZJContentPage调用
+以图文内容为例ContentVideoImageTextPageView
+```
+class ContentVideoImageTextPageView extends StatelessWidget {
+  final String? adId;
+  final double? width;
+  final double? height;
+//***********************所有样式均支持以下回调***********************/
+  final AdCallback? onVideoDidStartPlay;
+  final AdCallback? onVideoDidPause;
+  final AdCallback? onVideoDidResume;
+  final AdCallback? onVideoDidEndPlay;
+  final AdCallback? onVideoDidFailedToPlay;
+  final AdCallback? onContentDidFullDisplay;
+  final AdCallback? onContentDidEndDisplay;
+  final AdCallback? onContentDidPause;
+  final AdCallback? onContentDidResume;
+
+//***********************横版、图文版支持以下回调***********************/
+  final AdCallback? onHorizontalextFeedDetailDidEnter;
+  final AdCallback? onHorizontalextFeedDetailDidLeave;
+  final AdCallback? onHorizontalextFeedDetailDidAppear;
+  final AdCallback? onHorizontalextFeedDetailDidDisappear;
+
+//***********************仅图文版支持以下回调***********************/
+  final AdCallback? onImageTextDetailDidEnter;
+  final AdCallback? onImageTextDetailDidLeave;
+  final AdCallback? onImageTextDetailDidAppear;
+  final AdCallback? onImageTextDetailDidDisappear;
+  final AdCallback? onImageTextDetailDidLoadFinish;
+  final AdCallback? onImageTextDetailDidScroll;
+  ContentVideoImageTextPageView(
+      {Key? key,
+      this.adId,
+      this.width,
+      this.height,
+      this.onVideoDidStartPlay,
+      this.onVideoDidPause,
+      this.onVideoDidResume,
+      this.onVideoDidEndPlay,
+      this.onVideoDidFailedToPlay,
+      this.onContentDidFullDisplay,
+      this.onContentDidEndDisplay,
+      this.onContentDidPause,
+      this.onContentDidResume,
+      this.onHorizontalextFeedDetailDidEnter,
+      this.onHorizontalextFeedDetailDidLeave,
+      this.onHorizontalextFeedDetailDidAppear,
+      this.onHorizontalextFeedDetailDidDisappear,
+      this.onImageTextDetailDidEnter,
+      this.onImageTextDetailDidLeave,
+      this.onImageTextDetailDidAppear,
+      this.onImageTextDetailDidDisappear,
+      this.onImageTextDetailDidLoadFinish,
+      this.onImageTextDetailDidScroll})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget contentVideoImageText;
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      contentVideoImageText = AndroidView(
+        viewType: 'com.zjad.adsdk/contentVideoImageTextPage',
+        creationParams: {
+          "adId": adId,
+          "width": width,
+          "height": height,
+        },
+        creationParamsCodec: const StandardMessageCodec(),
+        onPlatformViewCreated: _onPlatformViewCreated,
+      );
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      contentVideoImageText = UiKitView(
+        viewType: 'com.zjad.adsdk/contentVideoImageText',
+        creationParams: {
+          "adId": adId,
+          "width": width,
+          "height": height,
+        },
+        creationParamsCodec: const StandardMessageCodec(),
+        onPlatformViewCreated: _onPlatformViewCreated,
+      );
+    } else {
+      contentVideoImageText = Text("Not supported");
+    }
+
+    return Container(
+      width: width,
+      height: height,
+      child: contentVideoImageText,
+    );
+  }
+
+  void _onPlatformViewCreated(int id) {
+    EventChannel eventChannel =
+        EventChannel("com.zjsdk.adsdk/content_video_event_$id");
+    eventChannel.receiveBroadcastStream().listen((event) {
+      print('Flutter.Listen--------');
+      switch (event["event"]) {
+        case "videoDidStartPlay":
+          onVideoDidStartPlay?.call("videoDidStartPlay", "");
+          break;
+
+        case "videoDidPause":
+          onVideoDidPause?.call("videoDidPause", "");
+          break;
+
+        case "videoDidResume":
+          onVideoDidResume?.call("videoDidResume", "");
+          break;
+
+        case "videoDidEndPlay":
+          onVideoDidEndPlay?.call("videoDidEndPlay", "");
+          break;
+
+        case "videoDidFailedToPlay":
+          onVideoDidFailedToPlay?.call("videoDidFailedToPlay", event["error"]);
+          break;
+
+        case "contentDidFullDisplay":
+          onContentDidFullDisplay?.call("contentDidFullDisplay", "");
+          break;
+
+        case "contentDidEndDisplay":
+          onContentDidEndDisplay?.call("contentDidEndDisplay", "");
+          break;
+
+        case "contentDidPause":
+          onContentDidPause?.call("contentDidPause", "");
+          break;
+
+        case "contentDidResume":
+          onContentDidResume?.call("contentDidResume", "");
+          break;
+
+        case "onHorizontalextFeedDetailDidEnter":
+          onContentDidResume?.call("onHorizontalextFeedDetailDidEnter", "");
+          break;
+        case "onHorizontalextFeedDetailDidLeave":
+          onContentDidResume?.call("onHorizontalextFeedDetailDidLeave", "");
+          break;
+        case "onHorizontalextFeedDetailDidAppear":
+          onContentDidResume?.call("onHorizontalextFeedDetailDidAppear", "");
+          break;
+        case "onHorizontalextFeedDetailDidDisappear":
+          onContentDidResume?.call("onHorizontalextFeedDetailDidDisappear", "");
+          break;
+        case "onImageTextDetailDidEnter":
+          onContentDidResume?.call("onImageTextDetailDidEnter", "");
+          break;
+        case "onImageTextDetailDidLeave":
+          onContentDidResume?.call("onImageTextDetailDidLeave", "");
+          break;
+        case "onImageTextDetailDidAppear":
+          onContentDidResume?.call("onImageTextDetailDidAppear", "");
+          break;
+        case "onImageTextDetailDidDisappear":
+          onContentDidResume?.call("onImageTextDetailDidDisappear", "");
+          break;
+        case "onImageTextDetailDidLoadFinish":
+          onContentDidResume?.call("onImageTextDetailDidLoadFinish", "");
+          break;
+        case "onImageTextDetailDidScroll":
+          onContentDidResume?.call("onImageTextDetailDidScroll", "");
+          break;
+      }
+    });
+  }
+}
+```
+#### 2.6.3、ZJContentPage广告回调说明
+```
+//***********************视频播放状态回调***********************/
+//视频开始播放
+onVideoDidStartPlay
+
+//视频暂停播放
+onVideoDidPause
+
+//视频恢复播放
+onVideoDidResume
+
+//视频停止播放
+onVideoDidEndPlay
+
+//视频播放失败
+onVideoDidFailedToPlay
+
+
+//***********************内容展示状态回调***********************/
+//内容展示
+onContentDidFullDisplay
+
+//内容隐藏
+onContentDidEndDisplay
+
+//内容暂停显示，ViewController disappear或者Application resign active
+onContentDidPause
+
+//内容恢复显示，ViewController appear或者Application become active
+onContentDidResume
+
+//*****横版内容状态回调******
+//进入横版视频详情页
+onHorizontalextFeedDetailDidEnter
+
+//离开横版视频详情页
+onHorizontalextFeedDetailDidLeave
+
+//视频详情页appear
+onHorizontalextFeedDetailDidAppear
+
+//详情页disappear
+onHorizontalextFeedDetailDidDisappear
+
+//***********************图文内容状态回调************************/
+//进入图文详情页
+onImageTextDetailDidEnter,
+
+//离开图文详情页
+onImageTextDetailDidLeave,
+
+//图文详情页appear
+onImageTextDetailDidAppear,
+
+//图文详情页disappear
+onImageTextDetailDidDisappear,
+
+//图文详情加载结果
+onImageTextDetailDidLoadFinish,
+
+// 图文详情阅读进度
+onImageTextDetailDidScroll
+```
+
+
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [一、iOS SDK接入说明](#span-idjump1一-ios-sdk接入说明span)
-  - [1.1、工程设置导入framework](#span-idjump1111-工程设置导入frameworkspan)
-    - [1.1.1、申请应用的AppID](#span-idjump111111-申请应用的appidspan)
-    - [1.1.2、导入framework](#span-idjump112112-导入frameworkspan)
-  - [1.2、Xcode编译选项设置](#span-idjump1212-xcode编译选项设置span)
-    - [1.2.1、添加权限](#span-idjump1121121-添加权限span)
-    - [1.2.2、运行环境配置](#span-idjump122122-运行环境配置span)
-    - [1.2.3、位置权限](#span-idjump123123-位置权限span)
-  - [1.3、初始化SDK](#span-idjump1313-初始化sdkspan)
-- [二、加载广告](#span-idjump2二-加载广告span)
-  - [2.1、接入开屏广告(SplashAd)](#span-idjump2121-接入开屏广告splashadspan)
-    - [2.1.1、开屏广告调用](#span-idjump211211-开屏广告调用span)
-    - [2.1.2、开屏广告回调说明](#span-idjump212212-开屏广告回调说明span)
-  - [2.2、接入激励视频(RewardVideoAd)](#span-idjump2222-接入激励视频rewardvideoadspan)
-    - [2.2.1、激励视频调用](#span-idjump221221-激励视频调用span)
-    - [2.2.2、激励视频回调说明](#span-idjump222222-激励视频回调说明span)
-  - [2.3、接入插屏广告(InterstitialAd)](#span-idjump2323-接入插屏广告interstitialadspan)
-    - [2.3.1、插屏广告调用](#span-idjump231231-插屏广告调用span)
-    - [2.3.2、插屏广告回调说明](#span-idjump232232-插屏广告回调说明span)
-  - [2.4、banner广告(BannerAd)](#span-idjump2424-banner广告banneradspan)
-    - [2.4.1、banner广告调用](#span-idjump231241-banner广告调用span)
-    - [2.4.2、banner广告回调说明](#span-idjump232242-banner广告回调说明span)
-  - [2.5、H5广告](#25-h5广告)
-    - [2.5.1、H5广告调用](#251-h5广告调用)
-    - [2.5.2、H5广告回调说明](#252-h5广告回调说明)
+- [一、iOS SDK接入说明](#-span-idjump1一-ios-sdk接入说明span)
+  - [1.1、工程设置导入framework](#-span-idjump1111-工程设置导入frameworkspan)
+    - [1.1.1、申请应用的AppID](#-span-idjump111111-申请应用的appidspan)
+    - [1.1.2、导入framework](#-span-idjump112112-导入frameworkspan)
+  - [1.2、Xcode编译选项设置](#-span-idjump1212-xcode编译选项设置span)
+    - [1.2.1、添加权限](#-span-idjump1121121-添加权限span)
+    - [1.2.2、运行环境配置](#-span-idjump122122-运行环境配置span)
+    - [1.2.3、位置权限](#-span-idjump123123-位置权限span)
+  - [1.3、初始化SDK](#-span-idjump1313-初始化sdkspan)
+- [二、加载广告](#-span-idjump2二-加载广告span)
+  - [2.1、接入开屏广告(SplashAd)](#-span-idjump2121-接入开屏广告splashadspan)
+    - [2.1.1、开屏广告调用](#-span-idjump211211-开屏广告调用span)
+    - [2.1.2、开屏广告回调说明](#-span-idjump212212-开屏广告回调说明span)
+  - [2.2、接入激励视频(RewardVideoAd)](#-span-idjump2222-接入激励视频rewardvideoadspan)
+    - [2.2.1、激励视频调用](#-span-idjump221221-激励视频调用span)
+    - [2.2.2、激励视频回调说明](#-span-idjump222222-激励视频回调说明span)
+  - [2.3、接入插屏广告(InterstitialAd)](#-span-idjump2323-接入插屏广告interstitialadspan)
+    - [2.3.1、插屏广告调用](#-span-idjump231231-插屏广告调用span)
+    - [2.3.2、插屏广告回调说明](#-span-idjump232232-插屏广告回调说明span)
+  - [2.4、banner广告(BannerAd)](#-span-idjump2424-banner广告banneradspan)
+    - [2.4.1、banner广告调用](#-span-idjump231241-banner广告调用span)
+    - [2.4.2、banner广告回调说明](#-span-idjump232242-banner广告回调说明span)
+  - [2.5、H5广告](#-25-h5广告)
+    - [2.5.1、H5广告调用](#-251-h5广告调用)
+    - [2.5.2、H5广告回调说明](#-252-h5广告回调说明)
+  - [2.6、接入视频内容(ZJContentPage)</span>](#-26-接入视频内容zjcontentpagespan)
+    - [2.6.1、ZJContentPage接入注意事项](#-261-font-colorredzjcontentpage接入注意事项font)
+    - [2.6.2、ZJContentPage调用](#-262-zjcontentpage调用)
+    - [2.6.3、ZJContentPage广告回调说明](#-263-zjcontentpage广告回调说明)
 
 <!-- /code_chunk_output -->
 
