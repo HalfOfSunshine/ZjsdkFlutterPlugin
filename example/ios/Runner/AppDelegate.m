@@ -14,7 +14,7 @@
 
   [GeneratedPluginRegistrant registerWithRegistry:self];
     
-  [self showSplashAd];
+//  [self showSplashAd];
   // Override point for customization after application launch.
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

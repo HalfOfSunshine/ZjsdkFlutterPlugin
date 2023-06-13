@@ -50,5 +50,48 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>该标识符将用于向您投放个性化广告</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>使用程序的时候获取本机位置</string>
+	<key>NSLocationDefaultAccuracyReduced</key>
+	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>总是获取本机位置</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>app不会连接到您所用网络上的设备，只会检测与您本地网关的连通性.用户也可以在 `设置--&gt;隐私--&gt;本地网络`界面修改 app 的权限设置</string>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>238da6jt44.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>x2jnk7ly8j.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>f7s53z58qe.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>58922NB4GD.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>kbd757ywx3.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>22mmun2rn5.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>r3y5dwb26t.skadnetwork</string>
+		</dict>
+	</array>
 </dict>
 </plist>

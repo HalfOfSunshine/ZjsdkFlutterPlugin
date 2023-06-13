@@ -1,18 +1,37 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 
 typedef void ZJSDKNativeViewCreatedCallback(ZjsdkFlutter controller);
 typedef void ZJSDKNativeEventCallback(MethodCall call);
 
+typedef MsgCallback = void Function(String msg);
 typedef AdCallback = void Function(String id, String msg);
 typedef AdErrorCallback = void Function(String id, int code, String message);
 
 class ZjsdkFlutter {
-  static int _channelId = 0;
+  static int _channelId = 8080;
   static MethodChannel _methodChannel =
       new MethodChannel("com.zjsdk.adsdk/method");
+  static void initZJMethodChannel(MsgCallback? onMethodChannelCreated) {
+    _methodChannel.invokeMethod("createZJMethodChannel", {
+      "_channelId": _channelId,
+    });
+    EventChannel rewardEventChannel =
+        EventChannel("com.zjsdk.adsdk/event_$_channelId");
+    rewardEventChannel.receiveBroadcastStream().listen((event) {
+      print("event====" + event["event"]);
+
+      switch (event["event"]) {
+        case "methodChannelCreated":
+          onMethodChannelCreated?.call("iOS->flutter事件通道建立成功");
+          break;
+      }
+    });
+  }
+
   static void showSplashAd(String adId, int fetchDelay,
       {AdCallback? onAdLoad,
       AdCallback? onAdShow,
@@ -21,7 +40,7 @@ class ZjsdkFlutter {
       AdCallback? onAdClose,
       AdCallback? onError}) {
     _methodChannel.invokeMethod("showSplashAd",
-        {"_channelId": ++_channelId, "adId": adId, "fetchDelay": fetchDelay});
+        {"_channelId": _channelId, "adId": adId, "fetchDelay": fetchDelay});
 
     EventChannel eventChannel =
         EventChannel("com.zjsdk.adsdk/event_$_channelId");
@@ -64,8 +83,7 @@ class ZjsdkFlutter {
       AdCallback? onAdClose,
       AdCallback? onError}) {
     _methodChannel.invokeMethod("showRewardVideoAd",
-        {"_channelId": ++_channelId, "adId": adId, "userId": userId});
-
+        {"_channelId": _channelId, "adId": adId, "userId": userId});
     EventChannel eventChannel =
         EventChannel("com.zjsdk.adsdk/event_$_channelId");
     eventChannel.receiveBroadcastStream().listen((event) {
@@ -110,7 +128,7 @@ class ZjsdkFlutter {
       AdCallback? onAdDetailClose,
       AdCallback? onError}) {
     _methodChannel.invokeMethod(
-        "showInterstitialAd", {"_channelId": ++_channelId, "adId": adId});
+        "showInterstitialAd", {"_channelId": _channelId, "adId": adId});
 
     EventChannel eventChannel =
         EventChannel("com.zjsdk.adsdk/event_$_channelId");
@@ -152,7 +170,7 @@ class ZjsdkFlutter {
       AdCallback? onRewardAdClick,
       AdCallback? onRewardAdError}) {
     _methodChannel.invokeMethod("showH5Ad", {
-      "_channelId": ++_channelId,
+      "_channelId": _channelId,
       "adId": adId,
       "userID": userID,
       "userName": userName,
@@ -205,7 +223,7 @@ class ZjsdkFlutter {
       AdCallback? onContentDidResume,
       AdCallback? onError}) {
     _methodChannel.invokeMethod(
-        "showContentVideoListPage", {"_channelId": ++_channelId, "adId": adId});
+        "showContentVideoListPage", {"_channelId": _channelId, "adId": adId});
 
     EventChannel eventChannel =
         EventChannel("com.zjsdk.adsdk/event_$_channelId");
@@ -261,7 +279,7 @@ class ZjsdkFlutter {
       AdCallback? onContentDidResume,
       AdCallback? onError}) {
     _methodChannel.invokeMethod(
-        "showContentVideoFeedPage", {"_channelId": ++_channelId, "adId": adId});
+        "showContentVideoFeedPage", {"_channelId": _channelId, "adId": adId});
 
     EventChannel eventChannel =
         EventChannel("com.zjsdk.adsdk/event_$_channelId");
@@ -320,8 +338,8 @@ class ZjsdkFlutter {
       AdCallback? onHorizontalFeedDetailDidAppear,
       AdCallback? onHorizontalFeedDetailDidDisappear,
       AdCallback? onError}) {
-    _methodChannel.invokeMethod("showContentVideoHorizontal",
-        {"_channelId": ++_channelId, "adId": adId});
+    _methodChannel.invokeMethod(
+        "showContentVideoHorizontal", {"_channelId": _channelId, "adId": adId});
 
     EventChannel eventChannel =
         EventChannel("com.zjsdk.adsdk/event_$_channelId");
@@ -406,8 +424,8 @@ class ZjsdkFlutter {
       AdCallback? onImageTextDetailDidLoadFinish,
       AdCallback? onImageTextDetailDidScroll,
       AdCallback? onError}) {
-    _methodChannel.invokeMethod("showContentVideoImageText",
-        {"_channelId": ++_channelId, "adId": adId});
+    _methodChannel.invokeMethod(
+        "showContentVideoImageText", {"_channelId": _channelId, "adId": adId});
 
     EventChannel eventChannel =
         EventChannel("com.zjsdk.adsdk/event_$_channelId");

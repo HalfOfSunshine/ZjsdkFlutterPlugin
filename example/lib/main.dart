@@ -22,6 +22,33 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    ZjsdkFlutter.initZJMethodChannel((msg) {
+      //先建立事件通道，在所有广告请求前调用
+      //确保广告调用都在事件通道建立成功之后，否则可能会收不到回调
+      print("iOS->flutter事件通道建立成功");
+      ZjsdkFlutter.showSplashAd(
+        "J5621495755",
+        5,
+        onAdLoad: (String id, String msg) {
+          print("SplashAd onAdLoad");
+        },
+        onAdShow: (String id, String msg) {
+          print("SplashAd onAdShow");
+        },
+        onAdClick: (String id, String msg) {
+          print("SplashAd onAdClick");
+        },
+        onCountdownEnd: (String id, String msg) {
+          print("SplashAd onVideoComplete");
+        },
+        onAdClose: (String id, String msg) {
+          print("SplashAd onAdClose");
+        },
+        onError: (String id, String msg) {
+          print("SplashAd onError = " + (msg));
+        },
+      );
+    });
   }
 
   @override
@@ -86,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       print("SplashAd onAdClose");
                     },
                     onError: (String id, String msg) {
-                      print("SplashAd onError = " + (msg ?? '未知错误'));
+                      print("SplashAd onError = " + (msg));
                     },
                   );
                 },
@@ -149,19 +176,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       print("H5 onAdLoad");
                     },
                     onError: (String id, String msg) {
-                      print("H5 onAdLoad = " + (msg ?? '未知错误'));
+                      print("H5 onAdLoad = " + (msg));
                     },
                     onRewardAdLoad: (String id, String msg) {
                       print("H5 onRewardAdLoad");
                     },
                     onRewardAdReward: (String id, String msg) {
-                      print("H5 onRewardAdReward = " + (msg ?? '未知错误'));
+                      print("H5 onRewardAdReward = " + (msg));
                     },
                     onRewardAdClick: (String id, String msg) {
                       print("H5 onRewardAdClick");
                     },
                     onRewardAdError: (String id, String msg) {
-                      print("H5 onRewardAdError = " + (msg ?? '未知错误'));
+                      print("H5 onRewardAdError = " + (msg));
                     },
                   );
                 },

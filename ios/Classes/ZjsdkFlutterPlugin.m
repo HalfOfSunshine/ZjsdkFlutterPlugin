@@ -23,6 +23,8 @@
 
 @property (nonatomic, strong) FlutterResult callback;
 
+@property (nonatomic, assign) BOOL methodChannelCreated;
+
 @end
 
 @implementation ZjsdkFlutterPlugin
@@ -46,7 +48,6 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     ZJContentListPagePlatformViewFactory *contentListFactory = [[ZJContentListPagePlatformViewFactory alloc] initWithRegistrar:registrar];
     [registrar registerViewFactory:contentListFactory withId:@"com.zjad.adsdk/contentVideoList"];
     
-#warning 未完成
     ZJContentFeedPagePlatformViewFactory *contentFeedFactory = [[ZJContentFeedPagePlatformViewFactory alloc] initWithRegistrar:registrar];
     [registrar registerViewFactory:contentFeedFactory withId:@"com.zjad.adsdk/contentVideoFeed"];
     
@@ -58,6 +59,7 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     
     [ZjsdkFlutterPlugin shareInstance].messenger = registrar.messenger;
 }
+
 
 
 
@@ -82,15 +84,13 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     if ([[call method] isEqualToString:@"changeNativeTitle"]) {
         [[NSNotificationCenter defaultCenter]postNotificationName:@"changeNativeTitle" object:call.arguments];
     }
-    // 建立监听
-    NSString *channelId = call.arguments[@"_channelId"];
-    if ([channelId isKindOfClass:[NSNumber class]]) {
-        NSString *channel = [NSString stringWithFormat:@"com.zjsdk.adsdk/event_%@", channelId];
-        FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:channel binaryMessenger:[ZjsdkFlutterPlugin shareInstance].messenger];
-        //设置FlutterStreamHandler协议代理
-        [eventChannel setStreamHandler:[ZjsdkFlutterPlugin shareInstance]];
+    if ([call.method isEqualToString:@"createZJMethodChannel"]) {
+       [self createZJMethodChannel:call];
+        return;
     }
-    
+    if(!_methodChannelCreated){
+        [self createZJMethodChannel:call];
+    }
     // 调用方法
     if ([call.method isEqualToString:@"setUserId"]) {
         NSString *uid = call.arguments[@"userId"];
@@ -132,6 +132,23 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     }
 }
 #pragma mark =============== 广告加载 ===============
+-(void)createZJMethodChannel:(FlutterMethodCall *)call{
+    // 建立监听
+    NSString *channelId = call.arguments[@"_channelId"];
+    if ([channelId isKindOfClass:[NSNumber class]]) {
+        NSString *channel = [NSString stringWithFormat:@"com.zjsdk.adsdk/event_%@", channelId];
+        NSLog(@"建立监听===============com.zjsdk.adsdk/event_%@",channelId);
+        FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:channel binaryMessenger:[ZjsdkFlutterPlugin shareInstance].messenger];
+        //设置FlutterStreamHandler协议代理
+        [eventChannel setStreamHandler:[ZjsdkFlutterPlugin shareInstance]];
+
+    }
+}
+
+-(void)initMethodChannelCallBackDelay{
+    NSLog(@"===delay0.5");
+    [self callbackWithEvent:@"methodChannelCreated" otherDic:nil error:nil];
+}
 /**开屏广告加载*/
 -(void)loadSplashAd:(FlutterMethodCall *)call{
     //--------开屏广告--------
@@ -450,6 +467,11 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     if (self.callback) {
         NSMutableDictionary *result = [NSMutableDictionary dictionary];
         [result setObject:event.length > 0 ?event :@"未知事件" forKey:@"event"];
+        if(error){
+            [result setObject:[error convertJSONString] forKey:@"error"];
+        }else{
+            [result setObject:@"" forKey:@"error"];
+        }
         if (otherDic) {
             [result addEntriesFromDictionary:otherDic];
         }
@@ -463,16 +485,26 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
 }
 #pragma mark =============== 实现FlutterStreamHandler协议 ===============
 - (FlutterError * _Nullable)onCancelWithArguments:(id _Nullable)arguments {
-    NSLog(@"ad plugin -> onCancelListen:%@", arguments);
+//    if([arguments isKindOfClass:[FlutterError class]]){
+//        NSLog(@"FlutterError:code=%@,message=%@,details=%@,",[(FlutterError *)arguments code],[(FlutterError *)arguments message],[(FlutterError *)arguments details]);
+//    }
+//    NSLog(@"ad plugin -> onCancelListen:%@", arguments);
     return nil;
 }
 
 - (FlutterError * _Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(nonnull FlutterEventSink)events {
-    NSLog(@"ad plugin -> onListen:%@", arguments);
+//    NSLog(@"ad plugin -> onListen:%@", arguments);
+//    if([arguments isKindOfClass:[FlutterError class]]){
+//        NSLog(@"FlutterError:code=%@,message=%@,details=%@,",[(FlutterError *)arguments code],[(FlutterError *)arguments message],[(FlutterError *)arguments details]);
+//    }
     if (events) {
         self.callback = events;
+        
+        if(!_methodChannelCreated){
+            _methodChannelCreated = YES;
+            [self callbackWithEvent:@"methodChannelCreated" otherDic:nil error:nil];
+        }
     }
-    
     return nil;
 }
 
