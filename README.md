@@ -11,19 +11,19 @@ print_background: true
 # ZJSDK_iOS_Flutter使用文档 {ignore=true}
 | 最新版本更新日志 | 修订日期  | 修订说明       |
 | ---------------- | --------- | -------------- |
-|v2.5.3.0|2023-02-22|1，新增视频内容广告样式，<br>2，增加视频内容四种样式插件<br>3，XCode14下视频内容接入方式更新，详见[2.6.1、ZJContentPage接入注意事项](#291-font-colorredzjcontentpage接入注意事项font)|
+|v0.1.2|2023-05-13|1，事件通道建立方式优化 <br>2，sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-cj.oss-cn-hangzhou.aliyuncs.com/android_sdk/iOS/ZJSDK_iOS_optmize%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.html)|
 
-## <span id="jump1">一、iOS SDK接入说明</span>
+## 一、iOS SDK接入说明
 
-### <span id="jump1.1">1.1、工程设置导入framework</span>
+### 1.1、工程设置导入framework
 
-#### <span id="jump1.1.1">1.1.1、申请应用的AppID</span>
+#### 1.1.1、申请应用的AppID
 
 ```
 请找运营人员获取应用ID和广告位ID。
 ```
 
-#### <span id="jump1.1.2">1.1.2、导入framework</span>
+#### 1.1.2、导入framework
 **1. pubspec.yaml接入方式**
 **复杂度：** ★☆☆
 **优缺点：** 桥接已写好，开发者只需导入package即可。
@@ -69,9 +69,9 @@ pod 'ZJSDK/ZJSDKModuleYM'  #云码广告，
 
 *拖入完请确保Copy Bundle Resources中有BUAdSDK.bundle，ZJSDKBundle.bundle否则可能出现icon图片加载不出来的情况。
 
-### <span id="jump1.2">1.2、Xcode编译选项设置</span>
+### 1.2、Xcode编译选项设置
 
-#### <span id="jump1.1.2.1">1.2.1、添加权限</span>
+#### 1.2.1、添加权限
 
 - 工程plist文件设置，点击右边的information Property List后边的 "+" 展开
 
@@ -87,15 +87,33 @@ pod 'ZJSDK/ZJSDKModuleYM'  #云码广告，
 
 - Build Settings中Other Linker Flags 增加参数-ObjC，字母o和c大写。
 
-#### <span id="jump1.2.2">1.2.2、运行环境配置</span>
+#### 1.2.2、运行环境配置
 
-- 支持系统 iOS 9.X 及以上;
-- SDK编译环境 Xcode 11;
-- 支持架构： x86-64, armv7, arm64,i386
+- 支持系统 iOS 11.X 及以上;
+- 支持架构： x86-64, armv7, arm64
+- SDK编译环境 Xcode 14.0 + 
 
 **添加依赖库**
 
 工程需要在TARGETS -> Build Phases中找到Link Binary With Libraries，点击“+”，依次添加下列依赖库
+
+- JavaScriptCore.framework
+
+- AudioToolbox.framework
+
+- QuickLook.framework
+
+- MessageUI.framework
+
+- AVKit.framework
+
+- DeviceCheck.framework
+
+- CFNetwork.framework
+
+- CoreGraphics.framework
+
+- SafariServices.framework
 
 - StoreKit.framework
 
@@ -141,12 +159,9 @@ pod 'ZJSDK/ZJSDKModuleYM'  #云码广告，
 
   SystemConfiguration.framework、CoreTelephony.framework、Security.framework是为了统计app信息使用
 
-#### <span id="jump1.2.3">1.2.3、位置权限</span>
+#### 1.2.3、位置权限
 
-SDK 不会主动获取应用位置权限，当应用本身有获取位置权限逻辑时，需要在应用的 info.plist 添加相应配置信息，避免 App Store 审核被拒：
-
-// 应用根据实际情况配置
-
+SDK 需要位置权限以更精准的匹配广告，需要在应用的 info.plist 添加相应配置信息，避免 App Store 审核被拒：
 ```
   Privacy - Location When In Use Usage Description
   Privacy - Location Always and When In Use Usage Description
@@ -155,7 +170,7 @@ SDK 不会主动获取应用位置权限，当应用本身有获取位置权限�
 ```
 
 
-### <span id="jump1.3">1.3、初始化SDK</span>
+### 1.3、初始化SDK
 
 
 
@@ -204,13 +219,22 @@ flutter项目初始化 参考demo的AppDelegate
 
 
 
-## <span id="jump2">二、加载广告</span>
+## 二、加载广告
+### 2.1、<font color=red>注册ZJ事件通道</font>
+加载广告之前先注册事件通道：
+```
+ZjsdkFlutter.initZJMethodChannel((msg) {
+  //先建立事件通道，在所有广告请求前调用
+  //确保广告调用都在事件通道建立成功之后，否则可能会收不到回调
+  print("iOS->flutter事件通道建立成功");
+});
+```
 
-### <span id="jump2.1">2.1、接入开屏广告(SplashAd)</span>
+### 2.2、接入开屏广告(SplashAd)
 
 - 类型说明： 开屏广告主要是 APP 启动时展示的全屏广告视图，开发只要按照接入标准就能够展示设计好的视图。
 
-#### <span id="jump2.1.1">2.1.1、开屏广告调用</span>
+#### 2.2.1、开屏广告调用
 
 ```
   static void showSplashAd(String adId,int fetchDelay,
@@ -255,7 +279,7 @@ flutter项目初始化 参考demo的AppDelegate
 
 ```
 
-#### <span id="jump2.1.2">2.1.2、开屏广告回调说明</span>
+#### 2.2.2、开屏广告回调说明
 通过回调中的event获取
 ```
 //开屏广告素材加载成功
@@ -282,11 +306,11 @@ splashAdError;
 ```
 
 
-### <span id="jump2.2">2.2、接入激励视频(RewardVideoAd)</span>
+### 2.3、接入激励视频(RewardVideoAd)
 
 - 类型说明： 激励视频广告是一种全新的广告形式，用户可选择观看视频广告以换取有价物，例如虚拟货币、应用内物品和独家内容等等；这类广告的长度为 15-30 秒，不可跳过，且广告的结束画面会显示结束页面，引导用户进行后续动作。
 
-#### <span id="jump2.2.1">2.2.1、激励视频调用</span>
+#### 2.3.1、激励视频调用
 
 ```
 /// show reward video ad
@@ -338,7 +362,7 @@ splashAdError;
 
 ```
 
-#### <span id="jump2.2.2">2.2.2、激励视频回调说明</span>
+#### 2.3.2、激励视频回调说明
 通过回调中的message获取
 ```
 //视频数据下载成功回调
@@ -363,11 +387,11 @@ rewardVideoAdDidPlayFinish
 rewardVideoAdError
 ```
 
-### <span id="jump2.3">2.3、接入插屏广告(InterstitialAd)</span>
+### 2.4、接入插屏广告(InterstitialAd)
 
 - 类型说明： 插屏广告是移动广告的一种常见形式，在应用开流程中弹出，当应用展示插页式广告时，用户可以选择点按广告，访问其目标网址，也可以将其关闭，返回应用。
 
-#### <span id="jump2.3.1">2.3.1、插屏广告调用</span>
+#### 2.4.1、插屏广告调用
 
 ```
  /// show interstitial ad
@@ -412,7 +436,7 @@ rewardVideoAdError
   }
 ```
 
-#### <span id="jump2.3.2">2.3.2、插屏广告回调说明</span>
+#### 2.4.2、插屏广告回调说明
 
 ```
 //插屏广告数据加载成功回调
@@ -434,10 +458,9 @@ interstitialAdDidClose
 interstitialAdDetailDidClose
 ```
 
-### <span id="jump2.4">2.4、banner广告(BannerAd)</span>
+### 2.5、banner广告(BannerAd)
 
-
-#### <span id="jump2.3.1">2.4.1、banner广告调用</span>
+#### 2.5.1、banner广告调用
 
 ```
 class BannerAdView extends StatelessWidget {
@@ -535,7 +558,7 @@ class BannerAdView extends StatelessWidget {
 
 ```
 
-#### <span id="jump2.3.2">2.4.2、banner广告回调说明</span>
+#### 2.5.2、banner广告回调说明
 
 ```
 
@@ -559,9 +582,9 @@ bannerAdViewDidCloseOtherController
 ```
 
 
-### 2.5、H5广告
+### 2.6、H5广告
 
-#### 2.5.1、H5广告调用
+#### 2.6.1、H5广告调用
 ```
    static void showH5Ad(String adId,String userID, String userName ,String userAvatar,
       {AdCallback onAdLoad,
@@ -603,7 +626,7 @@ bannerAdViewDidCloseOtherController
     });
   }
 ```
-#### 2.5.2、H5广告回调说明
+#### 2.6.2、H5广告回调说明
 ```
 //H5广告加载成功
 h5AdDidLoad
@@ -624,14 +647,13 @@ h5_rewardAdRewardClick
 h5_rewardAdRewardError
 
 ```
-### 2.6、接入视频内容(ZJContentPage)</span>
-#### 2.6.1、<font color=red>ZJContentPage接入注意事项</font>
+### 2.7、接入视频内容(ZJContentPage)</span>
+#### 2.7.1、<font color=red>ZJContentPage接入注意事项</font>
 由于快手pod库不支持内容包，视频内容模块需要单独手动导入
 视频内容集成注意事项：
-一，手动引入libIPDSDKModuleKS.a（直接拉进项目里）
-二，将KSAdSDK.framework和KSAdSDK.podspec，放在工程文件夹内（不是直接拉进项目里）
-三，Podfile里指定本地快手KSAdSDK.podspec的相对路径，如demo中路径为： pod 'KSAdSDK', :path => '../ZJSDK/ZJSDKModuleKS' 
-四：打包发布之前，去掉x86_64框架，具体的拆分合并命令参考以下
+1，将KSAdSDK.framework和KSAdSDK.podspec，放在工程文件夹内（不是直接拉进项目里）
+2，Podfile里指定本地快手KSAdSDK.podspec的相对路径，如demo中路径为：pod 'KSAdSDK', :path => './'
+3：打包发布之前，去掉x86_64框架，具体的拆分合并命令参考以下
 ```
 cd [KSAdSDK.framework所在的目录]
 mkdir ./bak
@@ -642,7 +664,7 @@ lipo -create KSAdSDK_armv7 KSAdSDK_arm64 -output KSAdSDK
 mv KSAdSDK KSAdSDK.framework/
 ```
 
-#### 2.6.2、ZJContentPage调用
+#### 2.7.2、ZJContentPage调用
 以图文内容为例ContentVideoImageTextPageView
 ```
 class ContentVideoImageTextPageView extends StatelessWidget {
@@ -812,7 +834,7 @@ class ContentVideoImageTextPageView extends StatelessWidget {
   }
 }
 ```
-#### 2.6.3、ZJContentPage广告回调说明
+#### 2.7.3、ZJContentPage广告回调说明
 ```
 //***********************视频播放状态回调***********************/
 //视频开始播放
@@ -877,40 +899,50 @@ onImageTextDetailDidLoadFinish,
 onImageTextDetailDidScroll
 ```
 
+##历史版本更新日志
+
+| 历史版本更新日志 | 修订日期  | 修订说明       |
+| ---------------- | --------- | -------------- |
+| v0.0.1          | 2020-1-14 | 首次提交，flutter插件化 |
+| v1.0.0          |2023-11-17  |1，增加支持广告类型<br>2，空安全适配 |
+| v1.0.1          |2023-02-22|1，增加视频内容插件样式，需要导入本地内容包才可调用<br>2，XCode14下视频内容接入方式更新|
+| v1.0.2          |2023-05-13  |1，事件通道建立方式优化<br>2，插件文档更新与sdk文档更新分离，sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-cj.oss-cn-hangzhou.aliyuncs.com/android_sdk/iOS/ZJSDK_iOS_optmize%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.html) |
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [一、iOS SDK接入说明](#-span-idjump1一-ios-sdk接入说明span)
-  - [1.1、工程设置导入framework](#-span-idjump1111-工程设置导入frameworkspan)
-    - [1.1.1、申请应用的AppID](#-span-idjump111111-申请应用的appidspan)
-    - [1.1.2、导入framework](#-span-idjump112112-导入frameworkspan)
-  - [1.2、Xcode编译选项设置](#-span-idjump1212-xcode编译选项设置span)
-    - [1.2.1、添加权限](#-span-idjump1121121-添加权限span)
-    - [1.2.2、运行环境配置](#-span-idjump122122-运行环境配置span)
-    - [1.2.3、位置权限](#-span-idjump123123-位置权限span)
-  - [1.3、初始化SDK](#-span-idjump1313-初始化sdkspan)
-- [二、加载广告](#-span-idjump2二-加载广告span)
-  - [2.1、接入开屏广告(SplashAd)](#-span-idjump2121-接入开屏广告splashadspan)
-    - [2.1.1、开屏广告调用](#-span-idjump211211-开屏广告调用span)
-    - [2.1.2、开屏广告回调说明](#-span-idjump212212-开屏广告回调说明span)
-  - [2.2、接入激励视频(RewardVideoAd)](#-span-idjump2222-接入激励视频rewardvideoadspan)
-    - [2.2.1、激励视频调用](#-span-idjump221221-激励视频调用span)
-    - [2.2.2、激励视频回调说明](#-span-idjump222222-激励视频回调说明span)
-  - [2.3、接入插屏广告(InterstitialAd)](#-span-idjump2323-接入插屏广告interstitialadspan)
-    - [2.3.1、插屏广告调用](#-span-idjump231231-插屏广告调用span)
-    - [2.3.2、插屏广告回调说明](#-span-idjump232232-插屏广告回调说明span)
-  - [2.4、banner广告(BannerAd)](#-span-idjump2424-banner广告banneradspan)
-    - [2.4.1、banner广告调用](#-span-idjump231241-banner广告调用span)
-    - [2.4.2、banner广告回调说明](#-span-idjump232242-banner广告回调说明span)
-  - [2.5、H5广告](#-25-h5广告)
-    - [2.5.1、H5广告调用](#-251-h5广告调用)
-    - [2.5.2、H5广告回调说明](#-252-h5广告回调说明)
-  - [2.6、接入视频内容(ZJContentPage)</span>](#-26-接入视频内容zjcontentpagespan)
-    - [2.6.1、ZJContentPage接入注意事项](#-261-font-colorredzjcontentpage接入注意事项font)
-    - [2.6.2、ZJContentPage调用](#-262-zjcontentpage调用)
-    - [2.6.3、ZJContentPage广告回调说明](#-263-zjcontentpage广告回调说明)
+- [一、iOS SDK接入说明](#一-ios-sdk接入说明)
+  - [1.1、工程设置导入framework](#11-工程设置导入framework)
+    - [1.1.1、申请应用的AppID](#111-申请应用的appid)
+    - [1.1.2、导入framework](#112-导入framework)
+  - [1.2、Xcode编译选项设置](#12-xcode编译选项设置)
+    - [1.2.1、添加权限](#121-添加权限)
+    - [1.2.2、运行环境配置](#122-运行环境配置)
+    - [1.2.3、位置权限](#123-位置权限)
+  - [1.3、初始化SDK](#13-初始化sdk)
+- [二、加载广告](#二-加载广告)
+  - [2.1、注册ZJ事件通道](#21-font-colorred注册zj事件通道font)
+  - [2.2、接入开屏广告(SplashAd)](#22-接入开屏广告splashad)
+    - [2.2.1、开屏广告调用](#221-开屏广告调用)
+    - [2.2.2、开屏广告回调说明](#222-开屏广告回调说明)
+  - [2.3、接入激励视频(RewardVideoAd)](#23-接入激励视频rewardvideoad)
+    - [2.3.1、激励视频调用](#231-激励视频调用)
+    - [2.3.2、激励视频回调说明](#232-激励视频回调说明)
+  - [2.4、接入插屏广告(InterstitialAd)](#24-接入插屏广告interstitialad)
+    - [2.4.1、插屏广告调用](#241-插屏广告调用)
+    - [2.4.2、插屏广告回调说明](#242-插屏广告回调说明)
+  - [2.5、banner广告(BannerAd)](#25-banner广告bannerad)
+    - [2.5.1、banner广告调用](#251-banner广告调用)
+    - [2.5.2、banner广告回调说明](#252-banner广告回调说明)
+  - [2.6、H5广告](#26-h5广告)
+    - [2.6.1、H5广告调用](#261-h5广告调用)
+    - [2.6.2、H5广告回调说明](#262-h5广告回调说明)
+  - [2.7、接入视频内容(ZJContentPage)</span>](#27-接入视频内容zjcontentpagespan)
+    - [2.7.1、ZJContentPage接入注意事项](#271-font-colorredzjcontentpage接入注意事项font)
+    - [2.7.2、ZJContentPage调用](#272-zjcontentpage调用)
+    - [2.7.3、ZJContentPage广告回调说明](#273-zjcontentpage广告回调说明)
+- [历史版本更新日志](#历史版本更新日志)
 
 <!-- /code_chunk_output -->
 
