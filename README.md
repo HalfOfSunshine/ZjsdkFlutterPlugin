@@ -11,8 +11,11 @@ print_background: true
 # ZJSDK_iOS_Flutter使用文档 {ignore=true}
 | 最新版本更新日志 | 修订日期  | 修订说明       |
 | ---------------- | --------- | -------------- |
-|v0.1.2|2023-05-13|1，事件通道建立方式优化 <br>2，sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-cj.oss-cn-hangzhou.aliyuncs.com/android_sdk/iOS/ZJSDK_iOS_optmize%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.html)|
+|v0.1.3|2024-01-25|1，新增插件注册接口。<br> &emsp; 有开屏需求，仍然推荐在原生注册，并调用开屏，从flutter唤起到注册完成到展示开屏的耗时太长。 <br>2，插件环境配置优化|
 
+
+历史版本信息见 [历史版本更新日志](#历史版本更新日志)
+sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-cj.oss-cn-hangzhou.aliyuncs.com/android_sdk/iOS/ZJSDK_iOS_optmize%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.html)
 ## 一、iOS SDK接入说明
 
 ### 1.1、工程设置导入framework
@@ -177,7 +180,8 @@ SDK 需要位置权限以更精准的匹配广告，需要在应用的 info.plis
 开发者需要在AppDelegate#application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions方法中调用以下代码来初始化sdk。
 
 flutter项目初始化 参考demo的AppDelegate
-1.通过pub集成
+#### 1.通过pub集成
+原生注册方式
 ```
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -186,10 +190,29 @@ flutter项目初始化 参考demo的AppDelegate
   // 注册flutter插件
   [GeneratedPluginRegistrant registerWithRegistry:self];
 }
-
+```
+Flutter注册方式，调用时机比较晚，推荐使用原生注册方式
+```
+   ZjsdkFlutter.initZJMethodChannel((msg) {
+      print("iOS->flutter事件通道建立成功");
+      //先建立事件通道，在所有广告请求前调用
+      //确保ZJSDK插件的方法调用都在事件通道建立成功之后
+      ZjsdkFlutter.registerAppId("zj_20201014iOSDEMO", onCallback: (msg, info) {
+        print("注册完成: " + (msg) + info);
+        if (msg == "success") {
+          ZjsdkFlutter.showSplashAd(
+            "J5621495755",
+            5,
+            ......
+            ......
+          );
+        }
+      });
+    });
 ```
 
-2.通过其他方式集成
+
+#### 2.通过其他方式集成
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   //初始化ZJSDK
@@ -224,8 +247,8 @@ flutter项目初始化 参考demo的AppDelegate
 加载广告之前先注册事件通道：
 ```
 ZjsdkFlutter.initZJMethodChannel((msg) {
-  //先建立事件通道，在所有广告请求前调用
-  //确保广告调用都在事件通道建立成功之后，否则可能会收不到回调
+  //先建立事件通道
+  //确保ZJSDK插件的方法调用都在事件通道建立成功之后
   print("iOS->flutter事件通道建立成功");
 });
 ```
@@ -903,10 +926,12 @@ onImageTextDetailDidScroll
 
 | 历史版本更新日志 | 修订日期  | 修订说明       |
 | ---------------- | --------- | -------------- |
-| v0.0.1          | 2020-1-14 | 首次提交，flutter插件化 |
-| v1.0.0          |2023-11-17  |1，增加支持广告类型<br>2，空安全适配 |
-| v1.0.1          |2023-02-22|1，增加视频内容插件样式，需要导入本地内容包才可调用<br>2，XCode14下视频内容接入方式更新|
-| v1.0.2          |2023-05-13  |1，事件通道建立方式优化<br>2，插件文档更新与sdk文档更新分离，sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-cj.oss-cn-hangzhou.aliyuncs.com/android_sdk/iOS/ZJSDK_iOS_optmize%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.html) |
+| v0.0.1          |2020-1-14 | 首次提交，flutter插件化 |
+| v0.1.0          |2022-11-17  |1，增加支持广告类型<br>2，空安全适配 |
+| v0.1.1          |2023-02-22|1，增加视频内容插件样式，需要导入本地内容包才可调用<br>2，XCode14下视频内容接入方式更新|
+| v0.1.2          |2023-05-13  |1，事件通道建立方式优化<br>2，插件文档更新与sdk文档更新分离|
+|v0.1.3|2024-01-25|1，新增插件注册接口。<br> &emsp; 有开屏需求，仍然推荐在原生注册，并调用开屏，从flutter唤起到注册完成到展示开屏的耗时太长。 <br>2，插件环境配置优化|
+
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
@@ -921,6 +946,8 @@ onImageTextDetailDidScroll
     - [1.2.2、运行环境配置](#122-运行环境配置)
     - [1.2.3、位置权限](#123-位置权限)
   - [1.3、初始化SDK](#13-初始化sdk)
+    - [1.通过pub集成](#1通过pub集成)
+    - [2.通过其他方式集成](#2通过其他方式集成)
 - [二、加载广告](#二-加载广告)
   - [2.1、注册ZJ事件通道](#21-font-colorred注册zj事件通道font)
   - [2.2、接入开屏广告(SplashAd)](#22-接入开屏广告splashad)
