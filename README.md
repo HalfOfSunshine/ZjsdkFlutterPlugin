@@ -15,7 +15,7 @@ print_background: true
 
 
 历史版本信息见 [历史版本更新日志](#历史版本更新日志)
-sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-cj.oss-cn-hangzhou.aliyuncs.com/android_sdk/iOS/ZJSDK_iOS_optmize%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.html)
+sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-1318684143.cos.ap-shanghai.myqcloud.com/sdk-downloads/ios/docs/ZJSDK_iOS_optmize%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.html?q-sign-algorithm=sha1&q-ak=AKIDvmUCeQMXAdhlooPP84Iy0uUu4CyEc1VVEA3Ge8PPbkDRFJoQobm3obw6NDrF-oc-&q-sign-time=1706178488;1706182088&q-key-time=1706178488;1706182088&q-header-list=host&q-url-param-list=&q-signature=d8d82b477cde0e41f29009336b84d9c79209756b&x-cos-security-token=7j2szizzk8WSlew7OqlM8fzEQ3qzJ4Bae598674c672b629358f674060a8dbb8dZQAsQHIGq1y4aszuK6Tn54swMN46qnmHNmB9KQuNG9zmuuvyf8KkLIF8A5bsnN5vKaMvjVrv9CpraerQM7X-P632S1dok5DKSOOE9Src3GmSI7YiYQS0Ae-wAa4IbFGGLoQfOs1H21sg6G0nPR0vJ7WabhYoi85hOjtZg7auFJnlxEP3Y_nXb7UqomLN-ZUm)
 ## 一、iOS SDK接入说明
 
 ### 1.1、工程设置导入framework

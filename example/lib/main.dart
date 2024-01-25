@@ -26,33 +26,33 @@ class _MyAppState extends State<MyApp> {
       print("iOS->flutter事件通道建立成功");
       //先建立事件通道，在所有广告请求前调用
       //确保广告调用都在事件通道建立成功之后，否则可能会收不到回调
-      ZjsdkFlutter.registerAppId("zj_20201014iOSDEMO", onCallback: (msg, info) {
-        print("注册完成: " + (msg) + info);
-        if (msg == "success") {
-          ZjsdkFlutter.showSplashAd(
-            "J5621495755",
-            5,
-            onAdLoad: (String id, String msg) {
-              print("SplashAd onAdLoad");
-            },
-            onAdShow: (String id, String msg) {
-              print("SplashAd onAdShow");
-            },
-            onAdClick: (String id, String msg) {
-              print("SplashAd onAdClick");
-            },
-            onCountdownEnd: (String id, String msg) {
-              print("SplashAd onVideoComplete");
-            },
-            onAdClose: (String id, String msg) {
-              print("SplashAd onAdClose");
-            },
-            onError: (String id, String msg) {
-              print("SplashAd onError = " + (msg));
-            },
-          );
-        }
-      });
+      // ZjsdkFlutter.registerAppId("zj_20201014iOSDEMO", onCallback: (msg, info) {
+      //   print("注册完成: " + (msg) + info);
+      //   if (msg == "success") {
+      ZjsdkFlutter.showSplashAd(
+        "J5621495755",
+        5,
+        onAdLoad: (String id, String msg) {
+          print("SplashAd onAdLoad");
+        },
+        onAdShow: (String id, String msg) {
+          print("SplashAd onAdShow");
+        },
+        onAdClick: (String id, String msg) {
+          print("SplashAd onAdClick");
+        },
+        onCountdownEnd: (String id, String msg) {
+          print("SplashAd onVideoComplete");
+        },
+        onAdClose: (String id, String msg) {
+          print("SplashAd onAdClose");
+        },
+        onError: (String id, String msg) {
+          print("SplashAd onError = " + (msg));
+        },
+      );
+      // }
+      // });
     });
   }
 

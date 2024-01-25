@@ -14,7 +14,7 @@
 
   [GeneratedPluginRegistrant registerWithRegistry:self];
     
-//  [self showSplashAd];
+  [self showSplashAd];
   // Override point for customization after application launch.
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
@@ -23,9 +23,9 @@
 - (void)setupZJSDK {
     
 //    // 初始化广告SDK
-//    [ZJAdSDK registerAppId:@"zj_20201014iOSDEMO"];
-//    NSString *sdkVersion = [ZJAdSDK SDKVersion];
-//    NSLog(@"ZJSDKVersion: %@", sdkVersion);
+    [ZJAdSDK registerAppId:@"zj_20201014iOSDEMO"];
+    NSString *sdkVersion = [ZJAdSDK SDKVersion];
+    NSLog(@"ZJSDKVersion: %@", sdkVersion);
 }
 
 
