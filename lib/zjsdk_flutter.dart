@@ -32,6 +32,23 @@ class ZjsdkFlutter {
     });
   }
 
+  static void registerAppId(String appId, {AdCallback? onCallback}) {
+    _methodChannel.invokeMethod("registerAppId", {"appId": appId});
+
+    EventChannel eventChannel =
+        EventChannel("com.zjsdk.adsdk/event_$_channelId");
+    eventChannel.receiveBroadcastStream().listen((event) {
+      switch (event["event"]) {
+        case "success":
+          onCallback?.call("success", event["info"].toString());
+          break;
+        case "fail":
+          onCallback?.call("fail", event["info"].toString());
+          break;
+      }
+    });
+  }
+
   static void showSplashAd(String adId, int fetchDelay,
       {AdCallback? onAdLoad,
       AdCallback? onAdShow,
@@ -112,7 +129,7 @@ class ZjsdkFlutter {
           onAdClose?.call("rewardVideoAdDidClose", "");
           break;
 
-        case "onError":
+        case "rewardVideoAdError":
           onError?.call("rewardVideoAdError", event["error"]);
           break;
       }

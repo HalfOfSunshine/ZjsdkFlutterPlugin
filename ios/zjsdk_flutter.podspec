@@ -4,7 +4,8 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'zjsdk_flutter'
-  s.version          = '0.1.2'
+  s.version          = '0.1.3'
+  s.static_framework = true
   s.summary          = 'zjsdk ads flutter plusin package.'
   s.description      = <<-DESC
 A new Flutter project.

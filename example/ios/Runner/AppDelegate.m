@@ -22,10 +22,10 @@
 // 初始化广告SDK
 - (void)setupZJSDK {
     
-    // 初始化广告SDK
-    [ZJAdSDK registerAppId:@"zj_20201014iOSDEMO"];
-    NSString *sdkVersion = [ZJAdSDK SDKVersion];
-    NSLog(@"ZJSDKVersion: %@", sdkVersion);
+//    // 初始化广告SDK
+//    [ZJAdSDK registerAppId:@"zj_20201014iOSDEMO"];
+//    NSString *sdkVersion = [ZJAdSDK SDKVersion];
+//    NSLog(@"ZJSDKVersion: %@", sdkVersion);
 }
 
 

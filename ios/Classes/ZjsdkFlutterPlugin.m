@@ -95,6 +95,8 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     if ([call.method isEqualToString:@"setUserId"]) {
         NSString *uid = call.arguments[@"userId"];
         
+    }else if ([call.method isEqualToString:@"registerAppId"]) {
+        [self registerAppId:call];
     }else if ([call.method isEqualToString:@"showSplashAd"]) {
 //        NSString *groupId = call.arguments[@"adId"];
         // 加载开屏广告
@@ -149,6 +151,16 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     NSLog(@"===delay0.5");
     [self callbackWithEvent:@"methodChannelCreated" otherDic:nil error:nil];
 }
+
+-(void)registerAppId:(FlutterMethodCall *)call{
+    __weak __typeof(self) weakSelf = self;
+    NSDictionary  *dic = call.arguments;
+    NSString *appId = [dic objectForKey:@"appId"];
+    [ZJAdSDK registerAppId:appId callback:^(BOOL completed, NSDictionary * _Nonnull info) {
+        [weakSelf callbackWithEvent:completed?@"success":@"fail" otherDic:@{@"info":info} error:nil];
+    }];
+}
+
 /**开屏广告加载*/
 -(void)loadSplashAd:(FlutterMethodCall *)call{
     //--------开屏广告--------
