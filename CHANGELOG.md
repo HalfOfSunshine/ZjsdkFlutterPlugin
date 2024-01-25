@@ -16,4 +16,8 @@
 
 * 事件通道建立方式优化
 * sdk更新内容请查看ZJSDK_iOS更新
+# 0.1.3
+
+* flutter插件新增注册接口
+* spec声明静态库
 <!-- ## Upgrading from 0.1.x -->
