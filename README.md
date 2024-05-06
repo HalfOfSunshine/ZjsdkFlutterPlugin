@@ -32,7 +32,7 @@ sdk更新内容请查看[ZJSDK_iOS接入文档](https://static-1318684143.cos.ap
 **优缺点：** 桥接已写好，开发者只需导入package即可。
 **适用：** 适用于大多数flutter开发者，集成、使用简单，省时省力。
 ```
-  zjsdk_flutter: ^0.1.3
+  zjsdk_flutter: ^0.1.5
 ```
 **2. CocoaPods接入方式**
 通过CocoaPods接入后，需实现原生与flutter之间的桥接
