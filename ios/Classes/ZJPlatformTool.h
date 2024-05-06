@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 //获得当前活动窗口的根视图
 + (UIViewController *)findCurrentShowingViewController;
 + (UIViewController *)findCurrentShowingViewControllerFrom:(UIViewController *)vc;
++(BOOL)isEmptyString:(NSString *)string;
 @end
 
 NS_ASSUME_NONNULL_END

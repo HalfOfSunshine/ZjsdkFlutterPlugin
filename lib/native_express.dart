@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zjsdk_flutter/zjsdk_flutter.dart';
 import 'native_express_ad_view.dart';
 
 class NativeExpressPage extends StatelessWidget {
@@ -7,37 +6,38 @@ class NativeExpressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      backgroundColor: Colors.grey,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             NativeExpressAdView(
               // @"G3061112693227741",@"K4000000007",@"T945740162",@"zjad_iOS_ZF0001",@"K4000000008"
-              adId: "J1516777127",
+              adId: "G3061112693227741",
               width: 300,
-              height: 200,
-              onAdLoad: (String id,String msg) {
+              height: 100,
+              adBackgroundColor: Color.fromARGB(255, 50, 255, 248),
+              onAdLoad: (String id, String msg) {
                 print("NativeExpressAd onAdLoad");
               },
-              onAdShow: (String id,String msg) {
+              onAdShow: (String id, String msg) {
                 print("NativeExpressAd onAdShow");
               },
-              onAdClick: (String id,String msg) {
+              onAdClick: (String id, String msg) {
                 print("NativeExpressAd onAdClick");
               },
-              onAdDislike: (String id,String msg) {
+              onAdDislike: (String id, String msg) {
                 print("NativeExpressAd onAdDislike");
               },
-              onError: (String id,String msg) {
-                print("NativeExpressAd onError = "+(msg));
+              onError: (String id, String msg) {
+                print("NativeExpressAd onError = " + (msg));
               },
-              onAdRenderSuccess: (String id,String msg) {
+              onAdRenderSuccess: (id, msg, {extraMap}) {
                 print("NativeExpressAd onAdRenderSuccess");
               },
-              onAdRenderFail: (String id,String msg) {
+              onAdRenderFail: (String id, String msg) {
                 print("NativeExpressAd onAdRenderFail");
               },
-              
             ),
           ],
         ),

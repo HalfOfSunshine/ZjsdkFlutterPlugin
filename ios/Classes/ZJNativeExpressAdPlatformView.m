@@ -13,7 +13,9 @@
 @property (nonatomic,strong)ZJNativeExpressFeedAdManager *feedAd;
 
 @property (nonatomic, strong) UIView *containerView;
- 
+
+@property (nonatomic, strong) UIColor *adBackgroundColor;
+
 @property (nonatomic, strong) FlutterResult nativeExpressCallback;
 
 @end
@@ -24,21 +26,18 @@
                     arguments:(id _Nullable)args
                     registrar:(NSObject<FlutterPluginRegistrar> *)registrar{
     if (self = [super init]) {
-        
         // 获取参数
         NSString *adId;
         CGFloat nativeExpressWidth = 0, nativeExpressHeight = 0;
         if ([args isKindOfClass:[NSDictionary class]]) {
-            adId = args[@"adId"];
-            nativeExpressWidth = [args[@"width"] floatValue];
-            nativeExpressHeight = [args[@"height"] floatValue];
+            adId = [ZJPlatformTool isEmptyString:args[@"adId"]]?@"":args[@"adId"];
+            nativeExpressWidth = [ZJPlatformTool isEmptyString:args[@"width"]]?[UIScreen mainScreen].bounds.size.width:[args[@"width"] floatValue];
+            nativeExpressHeight = [ZJPlatformTool isEmptyString:args[@"height"]]?0:[args[@"height"] floatValue];
+            if (![ZJPlatformTool isEmptyString:args[@"adBackgroundColor"]]) {
+                NSInteger argb = [args[@"adBackgroundColor"] integerValue];
+                self.adBackgroundColor = [UIColor colorWithRed:((float)((argb & 0xFF0000) >> 16))/255.0 green:((float)((argb & 0xFF00) >> 8))/255.0 blue:((float)(argb & 0xFF))/255.0 alpha:((float)((argb & 0xFF000000) >> 24))/255.0];
+            }
         }
-        
-        if (nativeExpressWidth <= 0.0) {
-            nativeExpressWidth = [UIScreen mainScreen].bounds.size.width;
-            nativeExpressHeight = nativeExpressWidth /(16/9);
-        }
-
 
         // 加载nativeExpress
         if (!_feedAd) {
@@ -125,6 +124,8 @@
     if (self.nativeExpressCallback) {
         NSMutableDictionary *result = [NSMutableDictionary dictionary];
         [result setObject:@"nativeExpressAdRenderSuccess" forKey:@"event"];
+        feedAd.feedView.backgroundColor = self.adBackgroundColor;
+        [result setObject:@{@"adHeight":@(feedAd.feedView.frame.size.height)} forKey:@"extraMap"];
         self.nativeExpressCallback(result);
     }
 }
@@ -247,6 +248,7 @@
 //    }
 //}
 
+
 @end
 
 #pragma mark - PlatformViewFactory
@@ -272,4 +274,5 @@
 - (NSObject<FlutterPlatformView> *)createWithFrame:(CGRect)frame viewIdentifier:(int64_t)viewId arguments:(id)args {
     return [[ZJNativeExpressAdPlatformView alloc] initWithFrame:frame viewIdentifier:viewId arguments:args registrar:_registrar];
 }
+
 @end

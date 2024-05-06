@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:flutter/services.dart';
 
 typedef void ZJSDKNativeViewCreatedCallback(ZjsdkFlutter controller);
@@ -10,6 +6,7 @@ typedef void ZJSDKNativeEventCallback(MethodCall call);
 typedef MsgCallback = void Function(String msg);
 typedef AdCallback = void Function(String id, String msg);
 typedef AdErrorCallback = void Function(String id, int code, String message);
+typedef AdExtraCallback = void Function(String id, String msg, {Map? extraMap});
 
 class ZjsdkFlutter {
   static int _channelId = 8080;

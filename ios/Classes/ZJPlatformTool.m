@@ -41,4 +41,29 @@
 
     return currentShowingVC;
 }
+
+// 判断字符串是否为空（YES：空）
++(BOOL)isEmptyString:(NSString *)string {
+    if (string) {
+    } else {
+        return YES;
+    }
+    
+    if ([string isEqual:[NSNull null]]) {
+        return YES;
+    }
+    NSString *compStr = [NSString stringWithFormat:@"%@", string];
+    
+    if ( compStr == nil || [compStr isEqualToString:@""] || [compStr isEqualToString:@"(null)"] || [compStr isEqualToString:@"<null>"]) {
+        return YES;
+    }
+    
+    if([compStr length] == 0) {
+        return YES;
+    } else if([[compStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""] == YES) {
+        return YES;
+    }
+    
+    return NO;
+}
 @end

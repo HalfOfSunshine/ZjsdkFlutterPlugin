@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:zjsdk_flutter/content_video.dart';
-import 'package:zjsdk_flutter/content_video_view.dart';
-import 'package:zjsdk_flutter/zjsdk_flutter.dart';
 
 class ContentVideoViewSelector extends StatelessWidget {
   @override

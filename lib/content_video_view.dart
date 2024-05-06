@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:zjsdk_flutter/zjsdk_flutter.dart';
 
 class ContentVideoListPageView extends StatelessWidget {
-  final String? adId;
-  final double? width;
-  final double? height;
+  final String adId;
+  final double width;
+  final double height;
   final AdCallback? onVideoDidStartPlay;
   final AdCallback? onVideoDidPause;
   final AdCallback? onVideoDidResume;
@@ -20,9 +20,9 @@ class ContentVideoListPageView extends StatelessWidget {
 
   ContentVideoListPageView(
       {Key? key,
-      this.adId,
-      this.width,
-      this.height,
+      required this.adId,
+      required this.width,
+      required this.height,
       this.onVideoDidStartPlay,
       this.onVideoDidPause,
       this.onVideoDidResume,
