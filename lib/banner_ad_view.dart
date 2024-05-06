@@ -6,9 +6,9 @@ import 'package:zjsdk_flutter/zjsdk_flutter.dart';
 
 /// Widget for banner ad
 class BannerAdView extends StatelessWidget {
-  final String? adId;
-  final double? width;
-  final double? height;
+  final String adId;
+  final double width;
+  final double height;
   final AdCallback? onAdLoad;
   final AdCallback? onAdShow;
   final AdCallback? onAdClick;
@@ -18,9 +18,9 @@ class BannerAdView extends StatelessWidget {
 
   BannerAdView(
       {Key ?key,
-      this.adId,
-      this.width,
-      this.height,
+      required this.adId,
+      required this.width,
+      required this.height,
       this.onAdLoad,
       this.onAdShow,
       this.onAdClick,

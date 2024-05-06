@@ -118,9 +118,9 @@ class ContentVideoListPageView extends StatelessWidget {
 
 /// Widget for banner ad
 class ContentVideoFeedPageView extends StatelessWidget {
-  final String? adId;
-  final double? width;
-  final double? height;
+  final String adId;
+  final double width;
+  final double height;
   final AdCallback? onVideoDidStartPlay;
   final AdCallback? onVideoDidPause;
   final AdCallback? onVideoDidResume;
@@ -133,9 +133,9 @@ class ContentVideoFeedPageView extends StatelessWidget {
 
   ContentVideoFeedPageView(
       {Key? key,
-      this.adId,
-      this.width,
-      this.height,
+      required this.adId,
+      required this.width,
+      required this.height,
       this.onVideoDidStartPlay,
       this.onVideoDidPause,
       this.onVideoDidResume,
@@ -230,9 +230,9 @@ class ContentVideoFeedPageView extends StatelessWidget {
 }
 
 class ContentVideoHorizontalPageView extends StatelessWidget {
-  final String? adId;
-  final double? width;
-  final double? height;
+  final String adId;
+  final double width;
+  final double height;
   final AdCallback? onVideoDidStartPlay;
   final AdCallback? onVideoDidPause;
   final AdCallback? onVideoDidResume;
@@ -249,9 +249,9 @@ class ContentVideoHorizontalPageView extends StatelessWidget {
 
   ContentVideoHorizontalPageView({
     Key? key,
-    this.adId,
-    this.width,
-    this.height,
+    required this.adId,
+    required this.width,
+    required this.height,
     this.onVideoDidStartPlay,
     this.onVideoDidPause,
     this.onVideoDidResume,
@@ -362,9 +362,9 @@ class ContentVideoHorizontalPageView extends StatelessWidget {
 }
 
 class ContentVideoImageTextPageView extends StatelessWidget {
-  final String? adId;
-  final double? width;
-  final double? height;
+  final String adId;
+  final double width;
+  final double height;
   final AdCallback? onVideoDidStartPlay;
   final AdCallback? onVideoDidPause;
   final AdCallback? onVideoDidResume;
@@ -388,9 +388,9 @@ class ContentVideoImageTextPageView extends StatelessWidget {
   final AdCallback? onImageTextDetailDidScroll;
   ContentVideoImageTextPageView(
       {Key? key,
-      this.adId,
-      this.width,
-      this.height,
+      required this.adId,
+      required this.width,
+      required this.height,
       this.onVideoDidStartPlay,
       this.onVideoDidPause,
       this.onVideoDidResume,
