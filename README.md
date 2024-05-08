@@ -74,7 +74,7 @@ pod 'ZJSDK/ZJSDKModuleYM'  #云码广告，
 
 ### 1.2、Xcode编译选项设置
 
-#### 1.2.1、添加权限
+#### 1.2.1、添加HTTP权限
 
 - 工程plist文件设置，点击右边的information Property List后边的 "+" 展开
 
@@ -90,7 +90,119 @@ pod 'ZJSDK/ZJSDKModuleYM'  #云码广告，
 
 - Build Settings中Other Linker Flags 增加参数-ObjC，字母o和c大写。
 
-#### 1.2.2、运行环境配置
+#### 1.2.2、添加位置权限
+
+SDK 需要位置权限以更精准的匹配广告，需要在应用的 info.plist 添加相应配置信息，避免 App Store 审核被拒：
+```
+  Privacy - Location When In Use Usage Description
+  Privacy - Location Always and When In Use Usage Description
+  Privacy - Location Always Usage Description
+  Privacy - Location Usage Description
+```
+#### 1.2.3、scheme列表添加以下内容
+
+用于判断用户设备使用环境，提高安全性，增加收益
+```
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>alipayauth</string>
+        <string>alipays</string>
+        <string>wechat</string>
+        <string>weixin</string>
+        <string>taobao</string>
+        <string>tbopen</string>
+        <string>openapp.jdmobile</string>
+        <string>pinduoduo</string>
+        <string>meituanwaimai</string>
+        <string>imeituan</string>
+        <string>snssdk1128</string>
+        <string>cydia</string>
+    </array>
+```
+
+
+#### 1.2.4、SKAdNetwork 接入
+使用Apple的转化跟踪SKAdNetwork，这意味着即使IDFA不可用，也可以将应用安装归因。
+1.在Xcode项目导航器中，选择Info.plist。
+2.单击属性列表编辑器中任何键旁边的添加按钮（**+**），以创建一个新的属性键。
+3.输入密钥名称SKAdNetworkItems。选择Array。
+4.将SKAdNetworkId以字典的形式添加到数组中。
+```
+//将SKAdNetwork ID 添加到 info.plist 中，以保证 SKAdNetwork 的正确运行
+//广点通
+SKAdNetworkIdentifier : f7s53z58qe.skadnetwork
+//快手
+SKAdNetworkIdentifier : r3y5dwb26t.skadnetwork
+//sigmob
+SKAdNetworkIdentifier : 58922NB4GD.skadnetwork
+//MTG
+SKAdNetworkIdentifier : kbd757ywx3.skadnetwork
+//穿山甲
+SKAdNetworkIdentifier : 238da6jt44.skadnetwork
+SKAdNetworkIdentifier : x2jnk7ly8j.skadnetwork
+SKAdNetworkIdentifier : 22mmun2rn5.skadnetwork
+//Google
+SKAdNetworkIdentifier : cstr6suwn9.skadnetwork
+```
+**info.plist代码示例**
+```
+<key>SKAdNetworkItems</key>
+<array>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>238da6jt44.skadnetwork</string>
+    </dict>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>x2jnk7ly8j.skadnetwork</string>
+    </dict>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>f7s53z58qe.skadnetwork</string>
+    </dict>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>58922NB4GD.skadnetwork</string>
+    </dict>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>kbd757ywx3.skadnetwork</string>
+    </dict>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>22mmun2rn5.skadnetwork</string>
+    </dict>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>r3y5dwb26t.skadnetwork</string>
+    </dict>
+    <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>cstr6suwn9.skadnetwork</string>
+    </dict>
+</array>
+```
+#### <span id="jump1.2.5">1.2.5、增加scheme</span>
+scheme列表添加以下内容
+用于判断设备使用环境，提升广告投放精准度
+```
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>alipayauth</string>
+		<string>alipays</string>
+		<string>wechat</string>
+		<string>weixin</string>
+		<string>taobao</string>
+		<string>tbopen</string>
+    <string>openapp.jdmobile</string>
+		<string>pinduoduo</string>
+    <string>meituanwaimai</string>
+		<string>imeituan</string>
+		<string>snssdk1128</string>
+	</array>
+```
+
+#### 1.2.7、运行环境配置
 
 - 支持系统 iOS 11.X 及以上;
 - 支持架构： x86-64, armv7, arm64
@@ -99,6 +211,8 @@ pod 'ZJSDK/ZJSDKModuleYM'  #云码广告，
 **添加依赖库**
 
 工程需要在TARGETS -> Build Phases中找到Link Binary With Libraries，点击“+”，依次添加下列依赖库
+
+- libsqlite3.0.tbd
 
 - JavaScriptCore.framework
 
@@ -162,24 +276,18 @@ pod 'ZJSDK/ZJSDKModuleYM'  #云码广告，
 
   SystemConfiguration.framework、CoreTelephony.framework、Security.framework是为了统计app信息使用
 
-#### 1.2.3、位置权限
-
-SDK 需要位置权限以更精准的匹配广告，需要在应用的 info.plist 添加相应配置信息，避免 App Store 审核被拒：
-```
-  Privacy - Location When In Use Usage Description
-  Privacy - Location Always and When In Use Usage Description
-  Privacy - Location Always Usage Description
-  Privacy - Location Usage Description
-```
 
 
 ### 1.3、初始化SDK
 
 
 
-开发者需要在AppDelegate#application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions方法中调用以下代码来初始化sdk。
+推荐开发者在AppDelegate的 
+- -(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
-flutter项目初始化 参考demo的AppDelegate
+方法中调用原生代码来初始化sdk并调用开屏广告。
+
+可参考demo的AppDelegate
 #### 1.通过pub集成
 原生注册方式
 ```
@@ -189,6 +297,7 @@ flutter项目初始化 参考demo的AppDelegate
   [ZJAdSDK registerAppId:@"zj_20201014iOSDEMO"];
   // 注册flutter插件
   [GeneratedPluginRegistrant registerWithRegistry:self];
+  [self showSplashAd];
 }
 ```
 Flutter注册方式，调用时机比较晚，推荐使用原生注册方式
@@ -484,98 +593,119 @@ interstitialAdDidClose
 interstitialAdDetailDidClose
 ```
 
-### 2.5、banner广告(BannerAd)
+### 2.5、信息流广告(NativeExpressAdView)
 
-#### 2.5.1、banner广告调用
+#### 2.5.1、信息流广告调用
 
 ```
-class BannerAdView extends StatelessWidget {
-  final String? adId;
-  final double? width;
-  final double? height;
+class NativeExpressAdView extends StatelessWidget {
+  final String adId;
+  final double width;
+  //最大高度，返回的广告位高度小于等于此高度。
+  final double height;
+  //设置背景色，部分联盟为白色，无法更改，建议设置背景色统一设置为白色
+  final Color? adBackgroundColor;
+
   final AdCallback? onAdLoad;
   final AdCallback? onAdShow;
   final AdCallback? onAdClick;
-  final AdCallback? onAdClose;
+  final AdCallback? onAdDislike;
   final AdCallback? onError;
-  final AdCallback? onAdDetailClose;
+  final AdExtraCallback? onAdRenderSuccess;
+  final AdCallback? onAdRenderFail;
 
-  BannerAdView(
-      {Key ?key,
-      this.adId,
-      this.width,
-      this.height,
+// nativeExpressAdViewDidLoad
+// nativeExpressAdViewWillShow
+// nativeExpressAdDidClick
+
+// nativeExpressAdDislike
+
+// nativeExpressAdDidLoadFail
+// nativeExpressAdRenderFail
+
+// nativeExpressAdRenderSuccess
+  NativeExpressAdView(
+      {Key? key,
+      required this.adId,
+      required this.width,
+      required this.height,
+      this.adBackgroundColor,
       this.onAdLoad,
       this.onAdShow,
       this.onAdClick,
-      this.onAdClose,
-      this.onAdDetailClose,
+      this.onAdDislike,
+      this.onAdRenderSuccess,
+      this.onAdRenderFail,
       this.onError})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget banner;
+    Widget nativeExpress;
     if (defaultTargetPlatform == TargetPlatform.android) {
-      banner = AndroidView(
-        viewType: 'com.zjad.adsdk/banner',
+      nativeExpress = AndroidView(
+        viewType: 'com.zjad.adsdk/nativeExpress',
         creationParams: {
           "adId": adId,
           "width": width,
           "height": height,
+          "adBackgroundColor": adBackgroundColor?.value,
         },
         creationParamsCodec: const StandardMessageCodec(),
         onPlatformViewCreated: _onPlatformViewCreated,
       );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      banner = UiKitView(
-        viewType: 'com.zjad.adsdk/banner',
+      nativeExpress = UiKitView(
+        viewType: 'com.zjad.adsdk/nativeExpress',
         creationParams: {
           "adId": adId,
           "width": width,
           "height": height,
+          "adBackgroundColor": adBackgroundColor?.value,
         },
         creationParamsCodec: const StandardMessageCodec(),
         onPlatformViewCreated: _onPlatformViewCreated,
       );
     } else {
-      banner = Text("Not supported");
+      nativeExpress = Text("Not supported");
     }
-
     return Container(
       width: width,
       height: height,
-      child: banner,
+      child: nativeExpress,
     );
   }
 
   void _onPlatformViewCreated(int id) {
-    EventChannel eventChannel = EventChannel("com.zjsdk.adsdk/banner_event_$id");
+    EventChannel eventChannel =
+        EventChannel("com.zjsdk.adsdk/native_express_event_$id");
     eventChannel.receiveBroadcastStream().listen((event) {
       print('Flutter.Listen--------');
       switch (event["event"]) {
-        case "bannerAdViewDidLoad":
-          onAdLoad?.call("bannerAdViewDidLoad","");
+        case "nativeExpressAdViewDidLoad":
+          onAdLoad?.call("nativeExpressAdViewDidLoad", "");
+          break;
+        case "nativeExpressAdViewWillShow":
+          onAdShow?.call("nativeExpressAdViewWillShow", "");
+          break;
+        case "nativeExpressAdRenderFail":
+          onAdRenderFail?.call("nativeExpressAdRenderFail", "");
+          break;
+        case "nativeExpressAdDidClick":
+          onAdClick?.call("nativeExpressAdDidClick", "");
           break;
 
-        case "bannerAdViewWillBecomVisible":
-          onAdShow?.call("bannerAdViewWillBecomVisible","");
+        case "nativeExpressAdDislike":
+          onAdDislike?.call("nativeExpressAdDislike", "");
           break;
 
-        case "bannerAdViewDidClick":
-          onAdClick?.call("bannerAdViewDidClick","");
+        case "nativeExpressAdDidLoadFail":
+          onError?.call("nativeExpressAdDidLoadFail", event["error"]);
           break;
 
-        case "bannerAdViewDislike":
-          onAdClose?.call("bannerAdViewDislike","");
-          break;
-
-        case "bannerAdDidLoadFail":
-          onError?.call("bannerAdDidLoadFail", event["error"]);
-          break;
-
-        case "bannerAdViewDidCloseOtherController":
-          onAdDetailClose?.call("bannerAdViewDidCloseOtherController","");
+        case "nativeExpressAdRenderSuccess":
+          onAdRenderSuccess?.call("nativeExpressAdRenderSuccess", "",
+              extraMap: event['extraMap']);
           break;
       }
     });
@@ -583,27 +713,29 @@ class BannerAdView extends StatelessWidget {
 }
 ```
 
-#### 2.5.2、banner广告回调说明
+#### 2.5.2、信息流广告回调说明
 
 ```
+//信息流广告加载成功
+nativeExpressAdViewDidLoad
 
-//banner广告加载成功
-bannerAdViewDidLoad
+//信息流广告加载失败
+nativeExpressAdDidLoadFail
 
-//banner广告加载失败
-bannerAdDidLoadFail
+//信息流广告渲染失败
+nativeExpressAdRenderFail
 
-//banner广告曝光回调
-bannerAdViewWillBecomVisible
+//信息流广告渲染成功，广告的真实高度在此回调中返回，通过extraMap的adHeight字段获取
+nativeExpressAdRenderSuccess
 
-//关闭banner广告回调
-bannerAdViewDislike
+//信息流广告曝光回调
+nativeExpressAdViewWillShow
 
-//点击banner广告回调
-bannerAdViewDidClick
+//点击信息流广告关闭/不喜欢按钮回调
+nativeExpressAdDislike
 
-//关闭banner广告详情页回调
-bannerAdViewDidCloseOtherController
+//点击信息流广告回调
+nativeExpressAdDidClick
 ```
 
 
@@ -954,9 +1086,12 @@ onImageTextDetailDidScroll
     - [1.1.1、申请应用的AppID](#111-申请应用的appid)
     - [1.1.2、导入framework](#112-导入framework)
   - [1.2、Xcode编译选项设置](#12-xcode编译选项设置)
-    - [1.2.1、添加权限](#121-添加权限)
-    - [1.2.2、运行环境配置](#122-运行环境配置)
-    - [1.2.3、位置权限](#123-位置权限)
+    - [1.2.1、添加HTTP权限](#121-添加http权限)
+    - [1.2.2、添加位置权限](#122-添加位置权限)
+    - [1.2.3、scheme列表添加以下内容](#123-scheme列表添加以下内容)
+    - [1.2.4、SKAdNetwork 接入](#124-skadnetwork-接入)
+    - [1.2.5、增加scheme](#span-idjump125125-增加schemespan)
+    - [1.2.7、运行环境配置](#127-运行环境配置)
   - [1.3、初始化SDK](#13-初始化sdk)
     - [1.通过pub集成](#1通过pub集成)
     - [2.通过其他方式集成](#2通过其他方式集成)
@@ -971,9 +1106,9 @@ onImageTextDetailDidScroll
   - [2.4、接入插屏广告(InterstitialAd)](#24-接入插屏广告interstitialad)
     - [2.4.1、插屏广告调用](#241-插屏广告调用)
     - [2.4.2、插屏广告回调说明](#242-插屏广告回调说明)
-  - [2.5、banner广告(BannerAd)](#25-banner广告bannerad)
-    - [2.5.1、banner广告调用](#251-banner广告调用)
-    - [2.5.2、banner广告回调说明](#252-banner广告回调说明)
+  - [2.5、信息流广告(NativeExpressAdView)](#25-信息流广告nativeexpressadview)
+    - [2.5.1、信息流广告调用](#251-信息流广告调用)
+    - [2.5.2、信息流广告回调说明](#252-信息流广告回调说明)
   - [2.6、H5广告](#26-h5广告)
     - [2.6.1、H5广告调用](#261-h5广告调用)
     - [2.6.2、H5广告回调说明](#262-h5广告回调说明)

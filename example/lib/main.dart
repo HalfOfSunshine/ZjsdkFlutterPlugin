@@ -29,28 +29,28 @@ class _MyAppState extends State<MyApp> {
       // ZjsdkFlutter.registerAppId("zj_20201014iOSDEMO", onCallback: (msg, info) {
       //   print("注册完成: " + (msg) + info);
       //   if (msg == "success") {
-      ZjsdkFlutter.showSplashAd(
-        "J5621495755",
-        5,
-        onAdLoad: (String id, String msg) {
-          print("SplashAd onAdLoad");
-        },
-        onAdShow: (String id, String msg) {
-          print("SplashAd onAdShow");
-        },
-        onAdClick: (String id, String msg) {
-          print("SplashAd onAdClick");
-        },
-        onCountdownEnd: (String id, String msg) {
-          print("SplashAd onVideoComplete");
-        },
-        onAdClose: (String id, String msg) {
-          print("SplashAd onAdClose");
-        },
-        onError: (String id, String msg) {
-          print("SplashAd onError = " + (msg));
-        },
-      );
+      // ZjsdkFlutter.showSplashAd(
+      //   "J5621495755",
+      //   5,
+      //   onAdLoad: (String id, String msg) {
+      //     print("SplashAd onAdLoad");
+      //   },
+      //   onAdShow: (String id, String msg) {
+      //     print("SplashAd onAdShow");
+      //   },
+      //   onAdClick: (String id, String msg) {
+      //     print("SplashAd onAdClick");
+      //   },
+      //   onCountdownEnd: (String id, String msg) {
+      //     print("SplashAd onVideoComplete");
+      //   },
+      //   onAdClose: (String id, String msg) {
+      //     print("SplashAd onAdClose");
+      //   },
+      //   onError: (String id, String msg) {
+      //     print("SplashAd onError = " + (msg));
+      //   },
+      // );
       // }
       // });
     });

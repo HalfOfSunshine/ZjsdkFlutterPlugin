@@ -12,11 +12,12 @@ class NativeExpressPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             NativeExpressAdView(
-              // @"G3061112693227741",@"K4000000007",@"T945740162",@"zjad_iOS_ZF0001",@"K4000000008"
-              adId: "G3061112693227741",
+              // @"G3061112693227741",@"K4000000007",@"T945740162",@"zjad_iOS_ZF0001",@""
+              adId: "K4000000008",
               width: 300,
               height: 100,
-              adBackgroundColor: Color.fromARGB(255, 50, 255, 248),
+              adBackgroundColor:
+                  Color.fromARGB(255, 50, 255, 248), //部分联盟背景色为白色不支持自定义。
               onAdLoad: (String id, String msg) {
                 print("NativeExpressAd onAdLoad");
               },
