@@ -93,5 +93,21 @@
 			<string>r3y5dwb26t.skadnetwork</string>
 		</dict>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>alipayauth</string>
+		<string>alipays</string>
+		<string>wechat</string>
+		<string>weixin</string>
+		<string>taobao</string>
+		<string>tbopen</string>
+		<string>openapp.jdmobile</string>
+		<string>pinduoduo</string>
+		<string>meituanwaimai</string>
+		<string>imeituan</string>
+		<string>snssdk1128</string>
+		<string>cydia</string>
+		<string>kwai</string>
+	</array>
 </dict>
 </plist>

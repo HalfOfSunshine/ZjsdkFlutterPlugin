@@ -223,7 +223,7 @@ static ZjsdkFlutterPlugin *zjsdkFlutterPlugin = nil;
     self.rewardVideoAd.rewardVideoDidRewardEffective = ^(NSString * _Nonnull transId,NSDictionary *validationDictionary) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         [dic setObject:transId forKey:@"transId"];
-        [dic setObject:validationDictionary forKey:@"validationDictionary"];
+        [dic setObject:validationDictionary?:@{} forKey:@"validationDictionary"];
         [weakSelf callbackWithEvent:@"rewardVideoDidRewardEffective" otherDic:dic error:nil];
     };
     //视频广告各种错误信息回调
